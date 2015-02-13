@@ -14,7 +14,7 @@ public class SocialInspectionWindow extends AbstractWindow {
 	private static final long serialVersionUID = 3714604390937043362L;
 
 	public SocialInspectionWindow(SocialInspectionWorker socialInspectionWorker) {
-		super("Social inspection");
+		super("Social inspection", 500, 300, 100, 100);
 
 		JLabel label = new JLabel();
 		this.getContentPane().add(label, BorderLayout.NORTH);

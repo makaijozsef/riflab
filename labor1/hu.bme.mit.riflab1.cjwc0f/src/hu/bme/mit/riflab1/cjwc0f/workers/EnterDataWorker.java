@@ -14,14 +14,14 @@ public class EnterDataWorker extends SwingWorker<Object, ApplicationData> {
 
 	AtomicBoolean clicked = new AtomicBoolean(false);
 
-	private BlockingQueue<ApplicationData> queue1;
-	private BlockingQueue<ApplicationData> queue2;
+	private BlockingQueue<ApplicationData> inputQueue;
+	private BlockingQueue<ApplicationData> outputQueue;
 
 	private JLabel label;
 
-	public EnterDataWorker(BlockingQueue<ApplicationData> queue1, BlockingQueue<ApplicationData> queue2) {
-		this.queue1 = queue1;
-		this.queue2 = queue2;
+	public EnterDataWorker(BlockingQueue<ApplicationData> inputQueue, BlockingQueue<ApplicationData> outputQueue) {
+		this.inputQueue = inputQueue;
+		this.outputQueue = outputQueue;
 	}
 
 	public void clicked() {
@@ -36,8 +36,8 @@ public class EnterDataWorker extends SwingWorker<Object, ApplicationData> {
 				clicked.set(false);
 				ApplicationData generatedData = EnterApplicantData.generate();
 				publish(generatedData);
-				queue1.put(generatedData);
-				queue2.put(generatedData);
+				inputQueue.put(generatedData);
+				outputQueue.put(generatedData);
 			}
 		}
 	}

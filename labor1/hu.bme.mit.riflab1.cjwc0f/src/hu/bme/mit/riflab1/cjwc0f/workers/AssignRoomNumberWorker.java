@@ -1,40 +1,22 @@
 package hu.bme.mit.riflab1.cjwc0f.workers;
 
+import hu.bme.mit.riflab1.cjwc0f.Util;
 import hu.bme.mit.riflab1.cjwc0f.data.ApplicationData;
 import hu.bme.mit.riflab1.cjwc0f.workflow.AssignRoomNumber;
 
-import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import javax.swing.JLabel;
-import javax.swing.SwingWorker;
+public class AssignRoomNumberWorker extends AbstractWorker {
 
-public class AssignRoomNumberWorker extends
-		SwingWorker<Object, ApplicationData> {
-
-	AtomicBoolean clicked = new AtomicBoolean(false);
-
-	private BlockingQueue<ApplicationData> inputQueue;
-	private BlockingQueue<ApplicationData> outputQueue;
-
-	private JLabel label;
-
-	public AssignRoomNumberWorker(BlockingQueue<ApplicationData> inputQueue,
-			BlockingQueue<ApplicationData> outputQueue) {
-		this.inputQueue = inputQueue;
-		this.outputQueue = outputQueue;
-	}
-
-	public void clicked() {
-		if (!inputQueue.isEmpty())
-			clicked.set(true);
+	public AssignRoomNumberWorker(BlockingQueue<ApplicationData> inputQueue, BlockingQueue<ApplicationData> outputQueue) {
+		super(inputQueue, outputQueue);
 	}
 
 	@Override
 	protected Object doInBackground() throws Exception {
-
 		while (true) {
+			Thread.sleep(Util.SLEEP_TIME);
 			if (clicked.get()) {
 				ApplicationData applicantData = createAndPublishData(clicked);
 				outputQueue.put(applicantData);
@@ -42,25 +24,11 @@ public class AssignRoomNumberWorker extends
 		}
 	}
 
-	private ApplicationData createAndPublishData(AtomicBoolean clicked)
-			throws InterruptedException {
+	private ApplicationData createAndPublishData(AtomicBoolean clicked) throws InterruptedException {
 		clicked.set(false);
-		ApplicationData applicantData = AssignRoomNumber.assignRoom(inputQueue
-				.take());
+		ApplicationData applicantData = AssignRoomNumber.assignRoom(inputQueue.take());
 		publish(applicantData);
 		return applicantData;
-	}
-
-	@Override
-	protected void process(List<ApplicationData> chunks) {
-		super.process(chunks);
-		for (ApplicationData applicantData : chunks) {
-			label.setText(applicantData.toString());
-		}
-	}
-
-	public void addLabel(JLabel label) {
-		this.label = label;
 	}
 
 }

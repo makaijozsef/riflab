@@ -5,7 +5,7 @@ public class SocialResult {
 	private int roomNumber;
 	private boolean isAdmitted;
 	private ApplicationData applicantData;
-	
+
 	public int getRoomNumber() {
 		return roomNumber;
 	}
@@ -21,20 +21,19 @@ public class SocialResult {
 	public void setAdmitted(boolean isAdmitted) {
 		this.isAdmitted = isAdmitted;
 	}
-	
+
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
-			
-		builder.append("<html>roomNumber: ");
+
+		builder.append("roomNumber: ");
 		builder.append(roomNumber);
-		builder.append("<br>");
-		
+		builder.append('\n');
+
 		builder.append("isAdmitted: ");
 		builder.append(isAdmitted);
-		builder.append("</html>");
-		
-		
+		builder.append('\n');
+
 		return builder.toString();
 	}
 

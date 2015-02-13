@@ -1,6 +1,5 @@
 package hu.bme.mit.riflab1.cjwc0f.window;
 
-import hu.bme.mit.riflab1.cjwc0f.workers.DetermineAverageWorker;
 import hu.bme.mit.riflab1.cjwc0f.workers.DetermineFinalResultWorker;
 
 import java.awt.BorderLayout;
@@ -15,7 +14,7 @@ public class DetermineFinalResultWindow extends AbstractWindow {
 	private static final long serialVersionUID = 3714604390937043362L;
 
 	public DetermineFinalResultWindow(DetermineFinalResultWorker determineFinalResultWorker) {
-		super("Determine final result");
+		super("Determine final result", 1500, 200, 100, 100);
 
 		JLabel label = new JLabel();
 		this.getContentPane().add(label, BorderLayout.NORTH);

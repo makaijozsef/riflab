@@ -2,28 +2,19 @@ package hu.bme.mit.riflab1.cjwc0f.window;
 
 import hu.bme.mit.riflab1.cjwc0f.workers.DetermineAverageWorker;
 
-import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
-import javax.swing.JButton;
-import javax.swing.JLabel;
 
 public class DetermineAverageWindow extends AbstractWindow {
 
 	private static final long serialVersionUID = 3714604390937043362L;
 
 	public DetermineAverageWindow(DetermineAverageWorker determineAverageWorker) {
-		super("Determine average");
+		super("Determine average", 350, 100, 100, 100);
 
-		JLabel label = new JLabel();
-		this.getContentPane().add(label, BorderLayout.NORTH);
-		determineAverageWorker.addLabel(label);
-
+		determineAverageWorker.addTextArea(textArea);
 		determineAverageWorker.execute();
 
-		JButton button = new JButton();
-		button.setText("Determine average");
 		button.addActionListener(new ActionListener() {
 
 			@Override
@@ -32,7 +23,7 @@ public class DetermineAverageWindow extends AbstractWindow {
 			}
 
 		});
-		this.getContentPane().add(button, BorderLayout.SOUTH);
+
 	}
 
 }

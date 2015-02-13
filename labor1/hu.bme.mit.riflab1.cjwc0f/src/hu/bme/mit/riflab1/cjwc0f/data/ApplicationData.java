@@ -84,39 +84,38 @@ public class ApplicationData {
 	public void setSocialResult(SocialResult socialResult) {
 		this.socialResult = socialResult;
 	}
-	
+
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
-		builder.append("<html>community points: ");
+		builder.append("community points: ");
 		builder.append(communityPoints);
-		builder.append("<br>");
-		
+		builder.append('\n');
+
 		builder.append("average1: ");
 		builder.append(average1);
-		builder.append("<br>");
-		
+		builder.append('\n');
+
 		builder.append("average2: ");
 		builder.append(average2);
-		builder.append("<br>");
-		
+		builder.append('\n');
+
 		builder.append("earnings: ");
 		builder.append(earnings);
-		builder.append("<br>");
-		
+		builder.append('\n');
+
 		builder.append("average: ");
 		builder.append(average);
-		builder.append("<br>");
+		builder.append('\n');
 
 		builder.append("roomNumber: ");
 		builder.append(roomNumber);
-		builder.append("<br>");
-		
+		builder.append('\n');
+
 		builder.append("isAdmitted: ");
 		builder.append(isAdmitted);
-		builder.append("</html>");
-		
-		
+		builder.append('\n');
+
 		return builder.toString();
 	}
 

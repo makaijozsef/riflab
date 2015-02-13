@@ -7,23 +7,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
-import javax.swing.JLabel;
 
+@SuppressWarnings("serial")
 public class AddCommunityPointsWindow extends AbstractWindow {
 
-	private static final long serialVersionUID = 3714604390937043362L;
-
 	public AddCommunityPointsWindow(AddCommunityPointsWorker addCommunityPointsWorker) {
-		super("Add community points");
+		super("Add community points", 1000, 100, 100, 100);
 
-		JLabel label = new JLabel();
-		this.getContentPane().add(label, BorderLayout.NORTH);
-		addCommunityPointsWorker.addLabel(label);
-
-		addCommunityPointsWorker.execute();
-
-		JButton button = new JButton();
-		button.setText("Add points");
 		button.addActionListener(new ActionListener() {
 
 			@Override
@@ -32,7 +22,9 @@ public class AddCommunityPointsWindow extends AbstractWindow {
 			}
 
 		});
-		this.getContentPane().add(button, BorderLayout.SOUTH);
+
+		addCommunityPointsWorker.addTextArea(textArea);
+		addCommunityPointsWorker.execute();
 
 		JButton buttonTrue = new JButton();
 		buttonTrue.setText("Go to room assignment");
@@ -58,7 +50,6 @@ public class AddCommunityPointsWindow extends AbstractWindow {
 		});
 		this.getContentPane().add(buttonFalse, BorderLayout.WEST);
 
-		
 	}
 
 }

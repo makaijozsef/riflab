@@ -1,5 +1,6 @@
 package hu.bme.mit.riflab1.cjwc0f.workers;
 
+import hu.bme.mit.riflab1.cjwc0f.Util;
 import hu.bme.mit.riflab1.cjwc0f.data.ApplicationData;
 import hu.bme.mit.riflab1.cjwc0f.data.SocialResult;
 import hu.bme.mit.riflab1.cjwc0f.workflow.DetermineFinalResult;
@@ -59,6 +60,7 @@ public class DetermineFinalResultWorker extends AbstractWorker {
 	protected Object doInBackground() throws Exception {
 
 		while (true) {
+			Thread.sleep(Util.SLEEP_TIME);
 			if (clicked.get()) {
 				ApplicationData applicantData = createAndPublishData(clicked);
 				outputQueue.put(applicantData);

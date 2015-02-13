@@ -1,5 +1,6 @@
 package hu.bme.mit.riflab1.cjwc0f.workers;
 
+import hu.bme.mit.riflab1.cjwc0f.Util;
 import hu.bme.mit.riflab1.cjwc0f.data.ApplicationData;
 import hu.bme.mit.riflab1.cjwc0f.data.SocialResult;
 import hu.bme.mit.riflab1.cjwc0f.workflow.SocialInspection;
@@ -34,6 +35,7 @@ public class SocialInspectionWorker extends SwingWorker<Object, SocialResult> {
 	protected Object doInBackground() throws Exception {
 
 		while (true) {
+			Thread.sleep(Util.SLEEP_TIME);
 			if (clicked.get()) {
 				clicked.set(false);
 				SocialResult socialResult = SocialInspection.createResult(inputQueue.take());

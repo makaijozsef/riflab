@@ -1,5 +1,6 @@
 package hu.bme.mit.riflab1.cjwc0f.workers;
 
+import hu.bme.mit.riflab1.cjwc0f.Util;
 import hu.bme.mit.riflab1.cjwc0f.data.ApplicationData;
 import hu.bme.mit.riflab1.cjwc0f.workflow.DetermineAverage;
 
@@ -15,6 +16,7 @@ public class DetermineAverageWorker extends AbstractWorker {
 	protected Object doInBackground() throws Exception {
 
 		while (true) {
+			Thread.sleep(Util.SLEEP_TIME);
 			if (clicked.get()) {
 				clicked.set(false);
 				ApplicationData applicantData = DetermineAverage.calculate(inputQueue.take());

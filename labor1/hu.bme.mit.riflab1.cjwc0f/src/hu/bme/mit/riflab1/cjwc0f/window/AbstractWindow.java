@@ -1,6 +1,10 @@
 package hu.bme.mit.riflab1.cjwc0f.window;
 
+import hu.bme.mit.riflab1.cjwc0f.Util;
+
 import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.Point;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -12,11 +16,11 @@ public abstract class AbstractWindow extends JFrame {
 	protected JTextArea textArea;
 	protected JButton button;
 
-	public AbstractWindow(String title, int upperLeftCornerX, int upperLeftCornerY, int width, int height) {
+	public AbstractWindow(String title, int upperLeftCornerX, int upperLeftCornerY) {
 		super(title);
 
-		// setLocation(new Point(upperLeftCornerX, upperLeftCornerY));
-		setBounds(upperLeftCornerX, upperLeftCornerY, upperLeftCornerX + width, upperLeftCornerY + height);
+		setLocation(new Point(upperLeftCornerX, upperLeftCornerY));
+		setPreferredSize(new Dimension(Util.DEFAULT_WIDTH, Util.DEFAULT_HEIGHT));
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 

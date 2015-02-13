@@ -2,6 +2,7 @@ package hu.bme.mit.riflab1.cjwc0f;
 
 import hu.bme.mit.riflab1.cjwc0f.data.ApplicationData;
 import hu.bme.mit.riflab1.cjwc0f.data.SocialResult;
+import hu.bme.mit.riflab1.cjwc0f.window.AbstractWindow;
 import hu.bme.mit.riflab1.cjwc0f.window.AddCommunityPointsWindow;
 import hu.bme.mit.riflab1.cjwc0f.window.AssignRoomNumberWindow;
 import hu.bme.mit.riflab1.cjwc0f.window.DetermineAverageWindow;
@@ -15,14 +16,16 @@ import hu.bme.mit.riflab1.cjwc0f.workers.DetermineFinalResultWorker;
 import hu.bme.mit.riflab1.cjwc0f.workers.EnterDataWorker;
 import hu.bme.mit.riflab1.cjwc0f.workers.SocialInspectionWorker;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
-
 public class WorkflowStarter {
-	
+
 	public static void main(String[] args) {
-		
+
+		// TODO does this really needed for the initial prodcess?
 		BlockingQueue<ApplicationData> queue1 = new ArrayBlockingQueue<ApplicationData>(20);
 		BlockingQueue<ApplicationData> queue2 = new ArrayBlockingQueue<ApplicationData>(20);
 		BlockingQueue<SocialResult> queue3 = new ArrayBlockingQueue<SocialResult>(20);
@@ -30,44 +33,45 @@ public class WorkflowStarter {
 		BlockingQueue<ApplicationData> queue5 = new ArrayBlockingQueue<ApplicationData>(20);
 		// May not correctly ordered!
 		BlockingQueue<ApplicationData> queue6 = new ArrayBlockingQueue<ApplicationData>(20);
-		
+
 		// Final results?
 		BlockingQueue<ApplicationData> queue7 = new ArrayBlockingQueue<ApplicationData>(20);
 
-		
-		
+		List<AbstractWindow> windows = new ArrayList<>();
+
 		EnterDataWorker enterDataWorker = new EnterDataWorker(queue1, queue2);
 		EnterDataWindow enterDataWindow = new EnterDataWindow(enterDataWorker);
-		enterDataWindow.pack();
-		enterDataWindow.setVisible(true);
-		
+		windows.add(enterDataWindow);
+
 		SocialInspectionWorker socialInspectionWorker = new SocialInspectionWorker(queue2, queue3);
 		SocialInspectionWindow socialInspectionWindow = new SocialInspectionWindow(socialInspectionWorker);
-		socialInspectionWindow.pack();
-		socialInspectionWindow.setVisible(true);
+		windows.add(socialInspectionWindow);
 
 		DetermineAverageWorker determineAverageWorker = new DetermineAverageWorker(queue1, queue4);
 		DetermineAverageWindow determineAverageWindow = new DetermineAverageWindow(determineAverageWorker);
-		determineAverageWindow.pack();
-		determineAverageWindow.setVisible(true);
+		windows.add(determineAverageWindow);
 
 		AddCommunityPointsWorker addCommunityPointsWorker = new AddCommunityPointsWorker(queue4, queue5, queue6);
 		AddCommunityPointsWindow addCommunityPointsWindow = new AddCommunityPointsWindow(addCommunityPointsWorker);
-		addCommunityPointsWindow.pack();
-		addCommunityPointsWindow.setVisible(true);
-		
-		AssignRoomNumberWorker assignRoomWorker = new AssignRoomNumberWorker(queue5,queue6);
-		AssignRoomNumberWindow assignRoomWindow = new AssignRoomNumberWindow(assignRoomWorker);
-		assignRoomWindow.pack();
-		assignRoomWindow.setVisible(true);
-		
-		DetermineFinalResultWorker finalResultWorker = new DetermineFinalResultWorker(queue6,queue3,queue7);
-		DetermineFinalResultWindow finalResultWindow = new DetermineFinalResultWindow(finalResultWorker);
-		finalResultWindow.pack();
-		finalResultWindow.setVisible(true);
-		
+		windows.add(addCommunityPointsWindow);
 
-		
+		AssignRoomNumberWorker assignRoomWorker = new AssignRoomNumberWorker(queue5, queue6);
+		AssignRoomNumberWindow assignRoomWindow = new AssignRoomNumberWindow(assignRoomWorker);
+		windows.add(assignRoomWindow);
+
+		DetermineFinalResultWorker finalResultWorker = new DetermineFinalResultWorker(queue6, queue3, queue7);
+		DetermineFinalResultWindow finalResultWindow = new DetermineFinalResultWindow(finalResultWorker);
+		windows.add(finalResultWindow);
+
+		openAllWindows(windows);
+	}
+
+	private static void openAllWindows(List<AbstractWindow> windows) {
+		for (AbstractWindow window : windows) {
+			window.pack();
+			window.setVisible(true);
+		}
+
 	}
 
 }

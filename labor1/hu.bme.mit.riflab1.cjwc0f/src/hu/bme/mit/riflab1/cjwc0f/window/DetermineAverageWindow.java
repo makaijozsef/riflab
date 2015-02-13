@@ -5,12 +5,11 @@ import hu.bme.mit.riflab1.cjwc0f.workers.DetermineAverageWorker;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+@SuppressWarnings("serial")
 public class DetermineAverageWindow extends AbstractWindow {
 
-	private static final long serialVersionUID = 3714604390937043362L;
-
 	public DetermineAverageWindow(DetermineAverageWorker determineAverageWorker) {
-		super("Determine average", 350, 100, 100, 100);
+		super("Determine average", 350, 100);
 
 		determineAverageWorker.addTextArea(textArea);
 		determineAverageWorker.execute();

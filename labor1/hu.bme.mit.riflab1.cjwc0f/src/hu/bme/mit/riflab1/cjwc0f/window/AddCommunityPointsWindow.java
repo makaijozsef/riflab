@@ -12,7 +12,7 @@ import javax.swing.JButton;
 public class AddCommunityPointsWindow extends AbstractWindow {
 
 	public AddCommunityPointsWindow(AddCommunityPointsWorker addCommunityPointsWorker) {
-		super("Add community points", 1000, 100, 100, 100);
+		super("Add community points", 700, 100);
 
 		button.addActionListener(new ActionListener() {
 

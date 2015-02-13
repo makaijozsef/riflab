@@ -1,7 +1,6 @@
 package hu.bme.mit.riflab1.cjwc0f.workers;
 
 import hu.bme.mit.riflab1.cjwc0f.data.ApplicationData;
-import hu.bme.mit.riflab1.cjwc0f.workflow.EnterApplicantData;
 
 import java.util.List;
 import java.util.concurrent.BlockingQueue;

@@ -7,18 +7,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
-import javax.swing.JLabel;
 
+@SuppressWarnings("serial")
 public class EnterDataWindow extends AbstractWindow {
 
-	private static final long serialVersionUID = 3714604390937043362L;
-
 	public EnterDataWindow(EnterDataWorker enterDataWorker) {
-		super("Enter applicant data", 0, 200, 100, 100);
+		super("Enter applicant data", 0, 300);
 
-		JLabel label = new JLabel();
-		this.getContentPane().add(label, BorderLayout.NORTH);
-		enterDataWorker.addLabel(label);
+		enterDataWorker.addTextArea(textArea);
 
 		enterDataWorker.execute();
 

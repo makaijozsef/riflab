@@ -9,7 +9,7 @@ import java.awt.event.ActionListener;
 public class AssignRoomNumberWindow extends AbstractWindow {
 
 	public AssignRoomNumberWindow(AssignRoomNumberWorker assignRoomNumberWorker) {
-		super("Assign room number", 1300, 50, 100, 100);
+		super("Assign room number", 1050, 0);
 
 		assignRoomNumberWorker.addTextArea(textArea);
 		assignRoomNumberWorker.execute();

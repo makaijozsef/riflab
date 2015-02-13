@@ -1,7 +1,7 @@
 package hu.bme.mit.riflab1.cjwc0f.workers;
 
 import hu.bme.mit.riflab1.cjwc0f.data.ApplicationData;
-import hu.bme.mit.riflab1.cjwc0f.workflow.AddCommunityPoints;
+import hu.bme.mit.riflab1.cjwc0f.workflow.AssignRoomNumber;
 
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
@@ -45,7 +45,7 @@ public class AssignRoomNumberWorker extends
 	private ApplicationData createAndPublishData(AtomicBoolean clicked)
 			throws InterruptedException {
 		clicked.set(false);
-		ApplicationData applicantData = AddCommunityPoints.calculate(inputQueue
+		ApplicationData applicantData = AssignRoomNumber.assignRoom(inputQueue
 				.take());
 		publish(applicantData);
 		return applicantData;

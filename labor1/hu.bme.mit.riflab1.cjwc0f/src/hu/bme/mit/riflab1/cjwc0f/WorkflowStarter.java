@@ -5,11 +5,13 @@ import hu.bme.mit.riflab1.cjwc0f.data.SocialResult;
 import hu.bme.mit.riflab1.cjwc0f.window.AddCommunityPointsWindow;
 import hu.bme.mit.riflab1.cjwc0f.window.AssignRoomNumberWindow;
 import hu.bme.mit.riflab1.cjwc0f.window.DetermineAverageWindow;
+import hu.bme.mit.riflab1.cjwc0f.window.DetermineFinalResultWindow;
 import hu.bme.mit.riflab1.cjwc0f.window.EnterDataWindow;
 import hu.bme.mit.riflab1.cjwc0f.window.SocialInspectionWindow;
 import hu.bme.mit.riflab1.cjwc0f.workers.AddCommunityPointsWorker;
 import hu.bme.mit.riflab1.cjwc0f.workers.AssignRoomNumberWorker;
 import hu.bme.mit.riflab1.cjwc0f.workers.DetermineAverageWorker;
+import hu.bme.mit.riflab1.cjwc0f.workers.DetermineFinalResultWorker;
 import hu.bme.mit.riflab1.cjwc0f.workers.EnterDataWorker;
 import hu.bme.mit.riflab1.cjwc0f.workers.SocialInspectionWorker;
 
@@ -26,7 +28,10 @@ public class WorkflowStarter {
 		BlockingQueue<SocialResult> queue3 = new ArrayBlockingQueue<SocialResult>(20);
 		BlockingQueue<ApplicationData> queue4 = new ArrayBlockingQueue<ApplicationData>(20);
 		BlockingQueue<ApplicationData> queue5 = new ArrayBlockingQueue<ApplicationData>(20);
+		// May not correctly ordered!
 		BlockingQueue<ApplicationData> queue6 = new ArrayBlockingQueue<ApplicationData>(20);
+		
+		// Final results?
 		BlockingQueue<ApplicationData> queue7 = new ArrayBlockingQueue<ApplicationData>(20);
 
 		
@@ -51,11 +56,17 @@ public class WorkflowStarter {
 		addCommunityPointsWindow.pack();
 		addCommunityPointsWindow.setVisible(true);
 		
-		AssignRoomNumberWorker assignRoomWorker = new AssignRoomNumberWorker(queue5,queue7);
+		AssignRoomNumberWorker assignRoomWorker = new AssignRoomNumberWorker(queue5,queue6);
 		AssignRoomNumberWindow assignRoomWindow = new AssignRoomNumberWindow(assignRoomWorker);
 		assignRoomWindow.pack();
 		assignRoomWindow.setVisible(true);
 		
+		DetermineFinalResultWorker finalResultWorker = new DetermineFinalResultWorker(queue6,queue3,queue7);
+		DetermineFinalResultWindow finalResultWindow = new DetermineFinalResultWindow(finalResultWorker);
+		finalResultWindow.pack();
+		finalResultWindow.setVisible(true);
+		
+
 		
 	}
 

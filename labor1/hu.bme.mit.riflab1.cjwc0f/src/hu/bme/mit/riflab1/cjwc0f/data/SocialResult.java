@@ -44,6 +44,7 @@ public class SocialResult {
 
 	public void setApplicantData(ApplicationData applicantData) {
 		this.applicantData = applicantData;
+		applicantData.setSocialResult(this);
 	}
 
 }

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="AssignRoomNumber">
+   <implementation class="hu.bme.mit.riflab.cjwc0f.impl.AssignRoomNumberService"/>
+   <service>
+      <provide interface="hu.bme.mit.riflab.cjwc0f.interf.IAssignRoomNumberService"/>
+   </service>
+</scr:component>

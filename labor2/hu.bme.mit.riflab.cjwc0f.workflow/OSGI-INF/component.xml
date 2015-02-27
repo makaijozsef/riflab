@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="hu.bme.mit.riflab.cjwc0f.workflow">
+   <implementation class="hu.bme.mit.riflab.cjwc0f.workflow.Workflow"/>
+   <property name="osgi.command.scope" type="String" value="workflow"/>
+   <property name="osgi.command.function" type="String">
+   begin
+   </property>
+   <service>
+ 		<provide interface="hu.bme.mit.riflab.cjwc0f.workflow.IWorkflow"/>
+   </service>
+   <reference cardinality="1..1" interface="hu.bme.mit.riflab.cjwc0f.interf.DictionaryService" name="Dictionary" policy="static" bind="setDict" unbind="unsetDict"/>
+   <reference bind="setEnterDataService" cardinality="1..1" interface="hu.bme.mit.riflab.cjwc0f.interf.IEnterApplicationDataService" name="EnterApplicationData" policy="static" unbind="unsetEnterDataService"/>
+   <reference bind="setDetermineAverageService" cardinality="1..1" interface="hu.bme.mit.riflab.cjwc0f.interf.IDetermineAverageService" name="IDetermineAverageService" policy="static" unbind="unsetDetermineAverageService"/>
+   <reference bind="setSocialInspectionService" cardinality="1..1" interface="hu.bme.mit.riflab.cjwc0f.interf.ISocialInspectionService" name="ISocialInspectionService" policy="static" unbind="unsetSocialInspectionService"/>
+   <reference bind="setAddCommunityService" cardinality="1..1" interface="hu.bme.mit.riflab.cjwc0f.interf.IAddCommunityPointsService" name="IAddCommunityPointsService" policy="static" unbind="unsetAddCommunityService"/>
+   <reference bind="setAssignRoomNumberService" cardinality="1..1" interface="hu.bme.mit.riflab.cjwc0f.interf.IAssignRoomNumberService" name="IAssignRoomNumberService" policy="static" unbind="unsetAssignRoomNumberService"/>
+   <reference bind="setFinalResultsService" cardinality="1..1" interface="hu.bme.mit.riflab.cjwc0f.interf.IDetermineFinalResultService" name="IDetermineFinalResultService" policy="static" unbind="unsetFinalResultsService"/>
+</scr:component>

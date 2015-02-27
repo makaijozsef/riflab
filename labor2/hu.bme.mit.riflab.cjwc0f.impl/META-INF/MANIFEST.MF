@@ -1,0 +1,15 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Impl
+Bundle-SymbolicName: hu.bme.mit.riflab.cjwc0f.impl
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: hu.bme.mit.riflab.cjwc0f.impl.Activator
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Service-Component: OSGI-INF/*.xml
+Import-Package: hu.bme.mit.riflab.cjwc0f.interf,
+ hu.bme.mit.riflab1.cjwc0f.bl,
+ hu.bme.mit.riflab1.cjwc0f.data,
+ org.osgi.framework;version="1.3.0",
+ org.osgi.util.tracker;version="1.5.1"
+Bundle-ActivationPolicy: lazy
+Export-Package: hu.bme.mit.riflab.cjwc0f.impl

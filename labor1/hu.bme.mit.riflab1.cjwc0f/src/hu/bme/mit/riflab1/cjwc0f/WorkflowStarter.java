@@ -25,7 +25,6 @@ public class WorkflowStarter {
 
 	public static void main(String[] args) {
 
-		// TODO does this really needed for the initial prodcess?
 		BlockingQueue<ApplicationData> queue1 = new ArrayBlockingQueue<ApplicationData>(20);
 		BlockingQueue<ApplicationData> queue2 = new ArrayBlockingQueue<ApplicationData>(20);
 		BlockingQueue<SocialResult> queue3 = new ArrayBlockingQueue<SocialResult>(20);
@@ -34,7 +33,7 @@ public class WorkflowStarter {
 		// May not correctly ordered!
 		BlockingQueue<ApplicationData> queue6 = new ArrayBlockingQueue<ApplicationData>(20);
 
-		// Final results?
+		// Final results
 		BlockingQueue<ApplicationData> queue7 = new ArrayBlockingQueue<ApplicationData>(20);
 
 		List<AbstractWindow> windows = new ArrayList<>();

@@ -25,6 +25,7 @@ public class Workflow implements IWorkflow {
 	private WorkflowUI window;
 
 	public static final Object syncObject = new Object();
+	public static boolean execute = true;
 
 	@Descriptor(value = "Starts the workflow")
 	@Override
@@ -34,52 +35,30 @@ public class Workflow implements IWorkflow {
 		window.pack();
 		window.setVisible(true);
 
-		boolean execute = true;
-
 		while (execute) {
 
 			ApplicationData applicationData = edService.generate();
 			window.setApplicantData(applicationData.toString());
-			System.out.println("Input data:");
-			System.out.println(applicationData);
 			window.getButton().setText("Next step");
-			synchronized (syncObject) {
-				syncObject.wait();
-			}
+			printAndWait("Input data:", applicationData);
 
 			ApplicationData calculatedData = daService.calculate(applicationData);
 			window.setDeterminedAverage(calculatedData.toString());
-			System.out.println("Determined average:");
-			System.out.println(calculatedData);
-			synchronized (syncObject) {
-				syncObject.wait();
-			}
+			printAndWait("Determined average:", calculatedData);
 
 			SocialResult socialResult = siService.createResult(calculatedData);
 			window.setSocialResults(socialResult.toString());
-			System.out.println("Social result:");
-			System.out.println(socialResult);
-			synchronized (syncObject) {
-				syncObject.wait();
-			}
+			printAndWait("Social result:", socialResult);
 
 			ApplicationData dataWithCommunityPoints = acService.calculate(calculatedData);
 			window.setCalculatedCommunityPoints(dataWithCommunityPoints.toString());
-			System.out.println("Average with community points:");
-			System.out.println(dataWithCommunityPoints);
-			synchronized (syncObject) {
-				syncObject.wait();
-			}
+			printAndWait("Average with community points:", dataWithCommunityPoints);
 
 			ApplicationData studyResult = dataWithCommunityPoints;
 			if (dataWithCommunityPoints.getAverage() >= 3) {
 				studyResult = arnService.assignRoom(dataWithCommunityPoints);
 				window.setRoomNumber(studyResult.getResult().toString());
-				System.out.println("Study room number assignment");
-				System.out.println(studyResult);
-				synchronized (syncObject) {
-					syncObject.wait();
-				}
+				printAndWait("Study room number assignment:", studyResult);
 			} else {
 				window.setRoomNumber("Average was too low");
 				System.out.println("Study room number assignment");
@@ -88,15 +67,25 @@ public class Workflow implements IWorkflow {
 
 			ApplicationData finalResult = dfrService.decide(studyResult, socialResult);
 			window.setFinalResults(finalResult.toString());
-			System.out.println("Final result");
-			System.out.println(finalResult);
 			window.getButton().setText("Restart");
-			synchronized (syncObject) {
-				syncObject.wait();
-			}
+			printAndWait("Final result", studyResult);
 
 		}
 
+	}
+
+	private void printAndWait(String title, Object data) throws InterruptedException {
+		System.out.println(title);
+		System.out.println(data.toString());
+		if (execute) {
+			waitForClick();
+		}
+	}
+
+	private void waitForClick() throws InterruptedException {
+		synchronized (syncObject) {
+			syncObject.wait();
+		}
 	}
 
 	public void setDict(DictionaryService service) {

@@ -2,6 +2,7 @@ package hu.bme.mit.riflab.cjwc0f.workflow.ui;
 
 import hu.bme.mit.riflab.cjwc0f.workflow.Workflow;
 
+import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Insets;
@@ -30,7 +31,7 @@ public class WorkflowUI extends JFrame {
 		setPreferredSize(new Dimension(1000, 600));
 		setResizable(false);
 
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
 		textApply = new JTextArea();
 		textAverage = new JTextArea();
@@ -73,36 +74,57 @@ public class WorkflowUI extends JFrame {
 	}
 
 	public void setApplicantData(String data) {
+		textFinalResult.setBackground(Color.WHITE);
 		textApply.setText(data);
 		textAverage.setText("");
 		textSocial.setText("");
 		textIncrementAverage.setText("");
 		textAssignRoom.setText("");
 		textFinalResult.setText("");
+		textApply.setBackground(Color.RED);
 	}
 
 	public void setDeterminedAverage(String data) {
+		textApply.setBackground(Color.WHITE);
 		textAverage.setText(data);
-	}
-
-	public void setCalculatedCommunityPoints(String data) {
-		textIncrementAverage.setText(data);
-	}
-
-	public void setRoomNumber(String data) {
-		textAssignRoom.setText(data);
+		textAverage.setBackground(Color.RED);
 	}
 
 	public void setSocialResults(String data) {
+		textAverage.setBackground(Color.WHITE);
 		textSocial.setText(data);
+		textSocial.setBackground(Color.RED);
+	}
+
+	public void setCalculatedCommunityPoints(String data) {
+		textSocial.setBackground(Color.WHITE);
+		textIncrementAverage.setText(data);
+		textIncrementAverage.setBackground(Color.RED);
+	}
+
+	public void setRoomNumber(String data) {
+		textIncrementAverage.setBackground(Color.WHITE);
+		textAssignRoom.setText(data);
+		textAssignRoom.setBackground(Color.RED);
 	}
 
 	public void setFinalResults(String data) {
+		textIncrementAverage.setBackground(Color.WHITE);
+		textAssignRoom.setBackground(Color.WHITE);
 		textFinalResult.setText(data);
+		textFinalResult.setBackground(Color.RED);
 	}
 
 	public JButton getButton() {
 		return button;
 	}
 
+	@Override
+	public void dispose() {
+		Workflow.execute = false;
+		synchronized (Workflow.syncObject) {
+			Workflow.syncObject.notify();
+		}
+		super.dispose();
+	}
 }

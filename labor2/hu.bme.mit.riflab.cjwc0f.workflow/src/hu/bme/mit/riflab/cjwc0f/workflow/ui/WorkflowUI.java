@@ -11,6 +11,7 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JTextArea;
 
 public class WorkflowUI extends JFrame {
@@ -27,6 +28,8 @@ public class WorkflowUI extends JFrame {
 
 	public WorkflowUI() {
 		super("Workflow with OSGi");
+		Container contentPane = this.getContentPane();
+		Insets insets = contentPane.getInsets();
 
 		setPreferredSize(new Dimension(1000, 600));
 		setResizable(false);
@@ -39,7 +42,20 @@ public class WorkflowUI extends JFrame {
 		textIncrementAverage = new JTextArea();
 		textAssignRoom = new JTextArea();
 		textFinalResult = new JTextArea();
-		Container contentPane = this.getContentPane();
+
+		JLabel textApplyJLabel = new JLabel("Applicant data");
+		JLabel textAverageJLabel = new JLabel("Calculated average");
+		JLabel textSocialJLabel = new JLabel("Social result");
+		JLabel textIncrementAverageJLabel = new JLabel("Community points calculated");
+		JLabel textAssignRoomJLabel = new JLabel("Room number assigned");
+		JLabel textFinalResultJLabel = new JLabel("Final application result");
+
+		contentPane.add(textApplyJLabel);
+		contentPane.add(textAverageJLabel);
+		contentPane.add(textSocialJLabel);
+		contentPane.add(textIncrementAverageJLabel);
+		contentPane.add(textAssignRoomJLabel);
+		contentPane.add(textFinalResultJLabel);
 
 		contentPane.add(textApply);
 		contentPane.add(textAverage);
@@ -50,12 +66,17 @@ public class WorkflowUI extends JFrame {
 
 		contentPane.setLayout(null);
 
-		Insets insets = contentPane.getInsets();
+		textApplyJLabel.setBounds(insets.left, 140 + insets.top, 200, 10);
 		textApply.setBounds(insets.left, 150 + insets.top, 200, 200);
-		textAverage.setBounds(200 + insets.left, 25 + insets.top, 200, 200);
-		textSocial.setBounds(400 + insets.left, 275 + insets.top, 200, 200);
-		textIncrementAverage.setBounds(400 + insets.left, 25 + insets.top, 200, 200);
-		textAssignRoom.setBounds(600 + insets.left, insets.top, 200, 200);
+		textAverageJLabel.setBounds(200 + insets.left, 25 + insets.top, 200, 10);
+		textAverage.setBounds(200 + insets.left, 35 + insets.top, 200, 200);
+		textSocialJLabel.setBounds(400 + insets.left, 255 + insets.top, 200, 10);
+		textSocial.setBounds(400 + insets.left, 265 + insets.top, 200, 200);
+		textIncrementAverageJLabel.setBounds(400 + insets.left, 25 + insets.top, 200, 10);
+		textIncrementAverage.setBounds(400 + insets.left, 35 + insets.top, 200, 200);
+		textAssignRoomJLabel.setBounds(600 + insets.left, insets.top, 200, 10);
+		textAssignRoom.setBounds(600 + insets.left, insets.top + 10, 200, 200);
+		textFinalResultJLabel.setBounds(800 + insets.left, 140 + insets.top, 200, 10);
 		textFinalResult.setBounds(800 + insets.left, 150 + insets.top, 200, 200);
 
 		button = new JButton();

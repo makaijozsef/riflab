@@ -20,4 +20,19 @@ public class StudyResult {
 	public void setAdmitted(boolean isAdmitted) {
 		this.isAdmitted = isAdmitted;
 	}
+
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+
+		builder.append("roomNumber: ");
+		builder.append(roomNumber);
+		builder.append('\n');
+
+		builder.append("isAdmitted: ");
+		builder.append(isAdmitted);
+		builder.append('\n');
+
+		return builder.toString();
+	}
 }

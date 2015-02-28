@@ -1,7 +1,5 @@
 package hu.bme.mit.riflab.cjwc0f.impl;
 
-import hu.bme.mit.riflab.cjwc0f.interf.Dictionary;
-import hu.bme.mit.riflab.cjwc0f.interf.DictionaryService;
 
 import java.util.Hashtable;
 
@@ -15,7 +13,6 @@ import org.osgi.util.tracker.ServiceTracker;
 public class Activator implements BundleActivator, ServiceListener {
 
 	
-	private DictionaryService service;
 	private ServiceTracker dictionaryServiceTracker;
 	private BundleContext fContext;
 	
@@ -34,21 +31,6 @@ public class Activator implements BundleActivator, ServiceListener {
 		Activator.context = bundleContext;
 		
 		fContext = context;
-		service = new DictionaryServiceImpl();
-
-		Hashtable props = new Hashtable();
-		// register the service
-		context.registerService(DictionaryService.class.getName(), service, props);
-
-		// create a tracker and track the service
-		dictionaryServiceTracker = new ServiceTracker(context, DictionaryService.class.getName(), null);
-		dictionaryServiceTracker.open();
-
-		// have a service listener to implement the whiteboard pattern
-	    fContext.addServiceListener(this, "(objectclass=" + Dictionary.class.getName() + ")");
-		
-		// grab the service
-		service = (DictionaryService) dictionaryServiceTracker.getService();
 		
 	}
 
@@ -62,27 +44,12 @@ public class Activator implements BundleActivator, ServiceListener {
 		dictionaryServiceTracker.close();
 		dictionaryServiceTracker = null;
 
-		service = null;
 		fContext = null;
 	}
 	
 
 	public void serviceChanged(ServiceEvent ev) {
-		ServiceReference sr = ev.getServiceReference();
-		switch(ev.getType()) {
-			case ServiceEvent.REGISTERED:
-			{
-				Dictionary dictionary = (Dictionary) fContext.getService(sr);
-				service.registerDictionary(dictionary);
-			}
-			break;
-			case ServiceEvent.UNREGISTERING:
-			{
-				Dictionary dictionary = (Dictionary) fContext.getService(sr);
-				service.unregisterDictionary(dictionary);
-			}
-			break;
-		}
+		
 	}
 
 

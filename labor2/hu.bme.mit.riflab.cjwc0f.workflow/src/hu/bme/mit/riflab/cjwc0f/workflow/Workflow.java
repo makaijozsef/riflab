@@ -1,6 +1,5 @@
 package hu.bme.mit.riflab.cjwc0f.workflow;
 
-import hu.bme.mit.riflab.cjwc0f.interf.DictionaryService;
 import hu.bme.mit.riflab.cjwc0f.interf.IAddCommunityPointsService;
 import hu.bme.mit.riflab.cjwc0f.interf.IAssignRoomNumberService;
 import hu.bme.mit.riflab.cjwc0f.interf.IDetermineAverageService;
@@ -15,7 +14,6 @@ import org.apache.felix.service.command.Descriptor;
 
 public class Workflow implements IWorkflow {
 
-	private DictionaryService service;
 	private IEnterApplicationDataService edService;
 	private IDetermineAverageService daService;
 	private ISocialInspectionService siService;
@@ -71,6 +69,8 @@ public class Workflow implements IWorkflow {
 			printAndWait("Final result", studyResult);
 
 		}
+		
+		execute = true;
 
 	}
 
@@ -85,17 +85,6 @@ public class Workflow implements IWorkflow {
 	private void waitForClick() throws InterruptedException {
 		synchronized (syncObject) {
 			syncObject.wait();
-		}
-	}
-
-	public void setDict(DictionaryService service) {
-		System.out.println("bind");
-		this.service = service;
-	}
-
-	public void unsetDict(DictionaryService service) {
-		if (this.service == service) {
-			this.service = null;
 		}
 	}
 

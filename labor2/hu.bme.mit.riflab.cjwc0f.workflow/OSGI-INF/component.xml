@@ -8,7 +8,6 @@
    <service>
  		<provide interface="hu.bme.mit.riflab.cjwc0f.workflow.IWorkflow"/>
    </service>
-   <reference cardinality="1..1" interface="hu.bme.mit.riflab.cjwc0f.interf.DictionaryService" name="Dictionary" policy="static" bind="setDict" unbind="unsetDict"/>
    <reference bind="setEnterDataService" cardinality="1..1" interface="hu.bme.mit.riflab.cjwc0f.interf.IEnterApplicationDataService" name="EnterApplicationData" policy="static" unbind="unsetEnterDataService"/>
    <reference bind="setDetermineAverageService" cardinality="1..1" interface="hu.bme.mit.riflab.cjwc0f.interf.IDetermineAverageService" name="IDetermineAverageService" policy="static" unbind="unsetDetermineAverageService"/>
    <reference bind="setSocialInspectionService" cardinality="1..1" interface="hu.bme.mit.riflab.cjwc0f.interf.ISocialInspectionService" name="ISocialInspectionService" policy="static" unbind="unsetSocialInspectionService"/>

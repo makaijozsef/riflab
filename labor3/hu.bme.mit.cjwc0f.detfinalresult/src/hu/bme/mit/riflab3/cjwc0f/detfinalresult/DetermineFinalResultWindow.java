@@ -35,7 +35,7 @@ public class DetermineFinalResultWindow extends AbstractWindow {
 	private Map<ApplicationData, QueueingConsumer.Delivery> applicationsToDeliveries = new HashMap<ApplicationData, QueueingConsumer.Delivery>();
 	private Map<SocialResult, QueueingConsumer.Delivery> socialsToDeliveries = new HashMap<SocialResult, QueueingConsumer.Delivery>();
 
-	public DetermineFinalResultWindow() {
+	public DetermineFinalResultWindow(String mqHost) {
 		
 		super("Determine final result", 1400, 300);
 		
@@ -44,7 +44,7 @@ public class DetermineFinalResultWindow extends AbstractWindow {
 
 		try {
 			//TODO obtain host from the command line arguments
-			createQueue("localhost", IQueueNames.FINAL_RESULT_SI, IQueueNames.FINAL_RESULT_AD);
+			createQueue(mqHost, IQueueNames.FINAL_RESULT_SI, IQueueNames.FINAL_RESULT_AD);
 		} catch (IOException e1) {
 			Logger.getGlobal().log(Level.SEVERE, "Could not create channel");
 			System.exit(ERROR);

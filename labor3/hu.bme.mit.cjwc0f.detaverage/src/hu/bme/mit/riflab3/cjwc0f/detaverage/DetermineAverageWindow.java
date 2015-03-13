@@ -23,7 +23,7 @@ import com.rabbitmq.client.ShutdownSignalException;
 @SuppressWarnings("serial")
 public class DetermineAverageWindow extends AbstractWindow {
 
-	public DetermineAverageWindow() {
+	public DetermineAverageWindow(String mqHost) {
 		super("Determine average", 350, 100);
 		
 		final String jvmName = ManagementFactory.getRuntimeMXBean().getName();
@@ -31,7 +31,7 @@ public class DetermineAverageWindow extends AbstractWindow {
 
 		try {
 			//TODO obtain host from the command line arguments
-			createQueue("localhost", IQueueNames.DETERMINE_AVERAGE, IQueueNames.COMMUNITY_POINTS);
+			createQueue(mqHost, IQueueNames.DETERMINE_AVERAGE, IQueueNames.COMMUNITY_POINTS);
 		} catch (IOException e1) {
 			Logger.getGlobal().log(Level.SEVERE, "Could not create channel");
 			System.exit(ERROR);

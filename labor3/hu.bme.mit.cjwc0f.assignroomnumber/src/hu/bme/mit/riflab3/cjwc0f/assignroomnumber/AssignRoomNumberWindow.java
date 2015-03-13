@@ -20,7 +20,7 @@ import com.rabbitmq.client.ShutdownSignalException;
 @SuppressWarnings("serial")
 public class AssignRoomNumberWindow extends AbstractWindow {
 
-	public AssignRoomNumberWindow() {
+	public AssignRoomNumberWindow(String mqHost) {
 		super("Assign room number", 1050, 0);
 
 		final String jvmName = ManagementFactory.getRuntimeMXBean().getName();
@@ -28,7 +28,7 @@ public class AssignRoomNumberWindow extends AbstractWindow {
 		
 		try {
 			//TODO obtain host from the command line arguments
-			createQueue("localhost", IQueueNames.COMMUNITY_POINTS_ROOM, IQueueNames.FINAL_RESULT_AD);
+			createQueue(mqHost, IQueueNames.COMMUNITY_POINTS_ROOM, IQueueNames.FINAL_RESULT_AD);
 		} catch (IOException e1) {
 			Logger.getGlobal().log(Level.SEVERE, "Could not create channel");
 			System.exit(ERROR);

@@ -23,7 +23,7 @@ import com.rabbitmq.client.ShutdownSignalException;
 @SuppressWarnings("serial")
 public class AddCommunityPointsWindow extends AbstractWindow {
 
-	public AddCommunityPointsWindow() {
+	public AddCommunityPointsWindow(String mqHost) {
 		super("Add community points", 700, 100);
 
 		final String jvmName = ManagementFactory.getRuntimeMXBean().getName();
@@ -31,7 +31,7 @@ public class AddCommunityPointsWindow extends AbstractWindow {
 		
 		try {
 			//TODO obtain host from the command line arguments
-			createQueue("localhost", IQueueNames.COMMUNITY_POINTS, IQueueNames.COMMUNITY_POINTS_ROOM, IQueueNames.FINAL_RESULT_AD);
+			createQueue(mqHost, IQueueNames.COMMUNITY_POINTS, IQueueNames.COMMUNITY_POINTS_ROOM, IQueueNames.FINAL_RESULT_AD);
 		} catch (IOException e1) {
 			Logger.getGlobal().log(Level.SEVERE, "Could not create channel");
 			System.exit(ERROR);

@@ -26,7 +26,7 @@ public class SocialInspectionWindow extends AbstractWindow {
 	
 	private QueueingConsumer.Delivery delivery;
 
-	public SocialInspectionWindow() {
+	public SocialInspectionWindow(String mqHost) {
 		super("Social inspection", 700, 500);
 		
 		final String jvmName = ManagementFactory.getRuntimeMXBean().getName();
@@ -34,7 +34,7 @@ public class SocialInspectionWindow extends AbstractWindow {
 		
 		try {
 			//TODO obtain host from the command line arguments
-			createQueue("localhost", IQueueNames.SOCIAL_INSPECTION, IQueueNames.FINAL_RESULT_SI);
+			createQueue(mqHost, IQueueNames.SOCIAL_INSPECTION, IQueueNames.FINAL_RESULT_SI);
 		} catch (IOException e1) {
 			Logger.getGlobal().log(Level.SEVERE, "Could not create channel");
 			System.exit(ERROR);

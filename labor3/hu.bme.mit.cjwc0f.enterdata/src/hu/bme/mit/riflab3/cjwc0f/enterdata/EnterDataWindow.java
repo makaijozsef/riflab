@@ -19,7 +19,7 @@ import javax.swing.JButton;
 @SuppressWarnings("serial")
 public class EnterDataWindow extends AbstractWindow {
 
-	public EnterDataWindow(){
+	public EnterDataWindow(String mqHost){
 		super("Enter applicant data", 0, 300);
 		
 		final String jvmName = ManagementFactory.getRuntimeMXBean().getName();
@@ -27,7 +27,7 @@ public class EnterDataWindow extends AbstractWindow {
 		
 		try {
 			//TODO obtain host from the command line arguments
-			createQueue("localhost", IQueueNames.DETERMINE_AVERAGE);
+			createQueue(mqHost, IQueueNames.DETERMINE_AVERAGE);
 		} catch (IOException e1) {
 			Logger.getGlobal().log(Level.SEVERE, "Could not create channel");
 			System.exit(ERROR);

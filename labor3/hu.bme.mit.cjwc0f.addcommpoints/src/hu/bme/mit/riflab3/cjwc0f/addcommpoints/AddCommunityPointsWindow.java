@@ -36,7 +36,7 @@ public class AddCommunityPointsWindow extends AbstractWindow {
 		
 		QueueingConsumer consumer = new QueueingConsumer(channel);
 	    try {
-			channel.basicConsume(IQueueNames.COMMUNITY_POINTS, true, consumer);
+			channel.basicConsume(IQueueNames.COMMUNITY_POINTS, false, consumer);
 		} catch (IOException e1) {
 			Logger.getGlobal().log(Level.SEVERE, "Could not create consumer");
 		}
@@ -49,6 +49,7 @@ public class AddCommunityPointsWindow extends AbstractWindow {
 				try {
 					QueueingConsumer.Delivery delivery = consumer.nextDelivery();
 					ApplicationData applicationData = (ApplicationData)Util.deserialize(delivery.getBody());
+					channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
 					
 					ApplicationData resultApplicantData = AddCommunityPoints.calculate(applicationData);
 					textArea.setText(resultApplicantData.toString());

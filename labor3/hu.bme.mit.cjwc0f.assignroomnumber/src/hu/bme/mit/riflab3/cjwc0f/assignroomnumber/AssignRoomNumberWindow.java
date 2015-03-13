@@ -35,7 +35,7 @@ public class AssignRoomNumberWindow extends AbstractWindow {
 		
 		QueueingConsumer consumer = new QueueingConsumer(channel);
 	    try {
-			channel.basicConsume(IQueueNames.COMMUNITY_POINTS_ROOM, true, consumer);
+			channel.basicConsume(IQueueNames.COMMUNITY_POINTS_ROOM, false, consumer);
 		} catch (IOException e1) {
 			Logger.getGlobal().log(Level.SEVERE, "Could not create consumer");
 		}
@@ -48,6 +48,7 @@ public class AssignRoomNumberWindow extends AbstractWindow {
 				try {
 					QueueingConsumer.Delivery delivery = consumer.nextDelivery();
 					ApplicationData applicationData = (ApplicationData)Util.deserialize(delivery.getBody());
+					channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
 					
 					ApplicationData resultApplicantData = AssignRoomNumber.assignRoom(applicationData);
 					int roomNumber = resultApplicantData.getResult().getRoomNumber();

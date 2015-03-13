@@ -14,12 +14,16 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.swing.JButton;
+
 import com.rabbitmq.client.ConsumerCancelledException;
 import com.rabbitmq.client.QueueingConsumer;
 import com.rabbitmq.client.ShutdownSignalException;
 
 @SuppressWarnings("serial")
 public class SocialInspectionWindow extends AbstractWindow {
+	
+	private QueueingConsumer.Delivery delivery;
 
 	public SocialInspectionWindow() {
 		super("Social inspection", 700, 500);
@@ -35,19 +39,45 @@ public class SocialInspectionWindow extends AbstractWindow {
 		QueueingConsumer consumer = new QueueingConsumer(channel);
 	    try {
 	    	// TODO change second parameter to false to use the autoAck
-			channel.basicConsume(IQueueNames.SOCIAL_INSPECTION, true, consumer);
+			channel.basicConsume(IQueueNames.SOCIAL_INSPECTION, false, consumer);
 		} catch (IOException e1) {
 			Logger.getGlobal().log(Level.SEVERE, "Could not create consumer");
 		}
 
 
+	    JButton continueButton = new JButton();
+	    continueButton.setEnabled(false);
+		continueButton.setText("Continue process!");
+	    
+	    button.setText("Consume message");
 		button.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				try {
-					QueueingConsumer.Delivery delivery = consumer.nextDelivery();
+					button.setEnabled(false);
+					delivery = consumer.nextDelivery();
+					continueButton.setEnabled(true);
+					
+				} catch (ShutdownSignalException | ConsumerCancelledException
+						| InterruptedException e1) {
+					Logger.getGlobal().log(Level.SEVERE, "Could not receive message");
+				}
+
+			}
+
+		});
+		this.getContentPane().add(button, BorderLayout.WEST);
+		
+		
+		continueButton.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				try {
 					ApplicationData applicationData = (ApplicationData)Util.deserialize(delivery.getBody());
+					// Sending ack back to the queue
+					channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
 					
 					SocialResult socialResult = SocialInspection.createResult(applicationData);
 					textArea.setText(socialResult.toString());
@@ -55,15 +85,32 @@ public class SocialInspectionWindow extends AbstractWindow {
 					byte[] payload = Util.serialize(socialResult);
 					channel.basicPublish("", IQueueNames.FINAL_RESULT_SI, null, payload);
 					
+					button.setEnabled(true);
+					continueButton.setEnabled(false);
+					
 				} catch (ShutdownSignalException | ConsumerCancelledException
-						| InterruptedException | ClassNotFoundException | IOException e1) {
+						| ClassNotFoundException | IOException e1) {
 					Logger.getGlobal().log(Level.SEVERE, "Could not receive message");
+					e1.printStackTrace();
 				}
 
 			}
 
 		});
-		this.getContentPane().add(button, BorderLayout.SOUTH);
+		this.getContentPane().add(continueButton, BorderLayout.EAST);
+		
+		
+		JButton killButton = new JButton();
+		killButton.setText("Kill process!");
+		killButton.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				System.exit(ABORT);
+			}
+
+		});
+		this.getContentPane().add(killButton, BorderLayout.SOUTH);
 	}
 
 }

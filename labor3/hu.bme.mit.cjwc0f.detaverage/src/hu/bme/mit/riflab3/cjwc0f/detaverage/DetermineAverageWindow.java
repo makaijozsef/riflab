@@ -35,7 +35,7 @@ public class DetermineAverageWindow extends AbstractWindow {
 		
 		QueueingConsumer consumer = new QueueingConsumer(channel);
 	    try {
-			channel.basicConsume(IQueueNames.DETERMINE_AVERAGE, true, consumer);
+			channel.basicConsume(IQueueNames.DETERMINE_AVERAGE, false, consumer);
 		} catch (IOException e1) {
 			Logger.getGlobal().log(Level.SEVERE, "Could not create consumer");
 		}
@@ -53,6 +53,8 @@ public class DetermineAverageWindow extends AbstractWindow {
 				try {
 					delivery = consumer.nextDelivery();
 					applicationData = (ApplicationData)Util.deserialize(delivery.getBody());
+					channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
+					
 					resultAppData = DetermineAverage.calculate(applicationData);
 					textArea.setText(resultAppData.toString());
 				} catch (ShutdownSignalException | ConsumerCancelledException

@@ -35,8 +35,8 @@ public class DetermineFinalResultWindow extends AbstractWindow {
 		QueueingConsumer appDataConsumer = new QueueingConsumer(channel);
 		QueueingConsumer socialDataConsumer = new QueueingConsumer(channel);
 	    try {
-			channel.basicConsume(IQueueNames.FINAL_RESULT_AD, true, appDataConsumer);
-			channel.basicConsume(IQueueNames.FINAL_RESULT_SI, true, socialDataConsumer);
+			channel.basicConsume(IQueueNames.FINAL_RESULT_AD, false, appDataConsumer);
+			channel.basicConsume(IQueueNames.FINAL_RESULT_SI, false, socialDataConsumer);
 		} catch (IOException e1) {
 			Logger.getGlobal().log(Level.SEVERE, "Could not create consumer");
 		}
@@ -49,9 +49,11 @@ public class DetermineFinalResultWindow extends AbstractWindow {
 				try {
 					QueueingConsumer.Delivery delivery = appDataConsumer.nextDelivery();
 					ApplicationData applicationData = (ApplicationData)Util.deserialize(delivery.getBody());
+					channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
 					
 					QueueingConsumer.Delivery deliverySI = socialDataConsumer.nextDelivery();
 					SocialResult socialResult = (SocialResult)Util.deserialize(deliverySI.getBody());
+					channel.basicAck(deliverySI.getEnvelope().getDeliveryTag(), false);
 					
 					ApplicationData finalResult = DetermineFinalResult.decide(applicationData, socialResult);
 					

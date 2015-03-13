@@ -9,6 +9,7 @@ import hu.bme.mit.riflab3.cjwc0f.workflow.Util;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.lang.management.ManagementFactory;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -22,7 +23,8 @@ public class AssignRoomNumberWindow extends AbstractWindow {
 	public AssignRoomNumberWindow() {
 		super("Assign room number", 1050, 0);
 
-
+		final String jvmName = ManagementFactory.getRuntimeMXBean().getName();
+		this.setTitle("Assign room number - " + jvmName);
 		
 		try {
 			//TODO obtain host from the command line arguments

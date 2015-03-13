@@ -10,6 +10,7 @@ import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.lang.management.ManagementFactory;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -25,6 +26,8 @@ public class AddCommunityPointsWindow extends AbstractWindow {
 	public AddCommunityPointsWindow() {
 		super("Add community points", 700, 100);
 
+		final String jvmName = ManagementFactory.getRuntimeMXBean().getName();
+		this.setTitle("Add community points - " + jvmName);
 		
 		try {
 			//TODO obtain host from the command line arguments

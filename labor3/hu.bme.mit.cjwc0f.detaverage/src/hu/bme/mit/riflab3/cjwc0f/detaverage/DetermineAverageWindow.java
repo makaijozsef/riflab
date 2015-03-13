@@ -10,6 +10,7 @@ import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.lang.management.ManagementFactory;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -24,6 +25,9 @@ public class DetermineAverageWindow extends AbstractWindow {
 
 	public DetermineAverageWindow() {
 		super("Determine average", 350, 100);
+		
+		final String jvmName = ManagementFactory.getRuntimeMXBean().getName();
+		this.setTitle("Determine average - " + jvmName);
 
 		try {
 			//TODO obtain host from the command line arguments

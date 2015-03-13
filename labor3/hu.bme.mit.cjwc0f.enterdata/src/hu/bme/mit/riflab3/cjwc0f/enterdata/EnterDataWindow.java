@@ -10,6 +10,7 @@ import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.lang.management.ManagementFactory;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -20,6 +21,9 @@ public class EnterDataWindow extends AbstractWindow {
 
 	public EnterDataWindow(){
 		super("Enter applicant data", 0, 300);
+		
+		final String jvmName = ManagementFactory.getRuntimeMXBean().getName();
+		this.setTitle("Enter applicant data - " + jvmName);
 		
 		try {
 			//TODO obtain host from the command line arguments

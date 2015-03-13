@@ -3,7 +3,6 @@ package hu.bme.mit.riflab3.cjwc0f.assignroomnumber;
 import hu.bme.mit.riflab3.cjwc0f.data.ApplicationData;
 import hu.bme.mit.riflab3.cjwc0f.gui.AbstractWindow;
 import hu.bme.mit.riflab3.cjwc0f.queues.IQueueNames;
-import hu.bme.mit.riflab3.cjwc0f.workflow.AddCommunityPoints;
 import hu.bme.mit.riflab3.cjwc0f.workflow.AssignRoomNumber;
 import hu.bme.mit.riflab3.cjwc0f.workflow.Util;
 
@@ -48,17 +47,18 @@ public class AssignRoomNumberWindow extends AbstractWindow {
 				try {
 					QueueingConsumer.Delivery delivery = consumer.nextDelivery();
 					ApplicationData applicationData = (ApplicationData)Util.deserialize(delivery.getBody());
-					channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
 					
 					ApplicationData resultApplicantData = AssignRoomNumber.assignRoom(applicationData);
 					int roomNumber = resultApplicantData.getResult().getRoomNumber();
 					resultApplicantData.setRoomNumber(roomNumber);
 					resultApplicantData.setAdmitted(roomNumber > 0);
-					textArea.setText(resultApplicantData.toString());
 					
 					byte[] payload = Util.serialize(resultApplicantData);
 					channel.basicPublish("", IQueueNames.FINAL_RESULT_AD, null, payload);
 					
+					channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
+					
+					textArea.setText(resultApplicantData.toString());
 					
 				} catch (ShutdownSignalException | ConsumerCancelledException
 						| InterruptedException | ClassNotFoundException | IOException e1) {

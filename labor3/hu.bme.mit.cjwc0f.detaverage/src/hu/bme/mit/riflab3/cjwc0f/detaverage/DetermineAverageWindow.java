@@ -53,23 +53,21 @@ public class DetermineAverageWindow extends AbstractWindow {
 				try {
 					delivery = consumer.nextDelivery();
 					applicationData = (ApplicationData)Util.deserialize(delivery.getBody());
-					channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
 					
 					resultAppData = DetermineAverage.calculate(applicationData);
+					
+					byte[] payload = Util.serialize(resultAppData);
+					channel.basicPublish("", IQueueNames.COMMUNITY_POINTS, null, payload);
+					
+					channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
+					
 					textArea.setText(resultAppData.toString());
+					
 				} catch (ShutdownSignalException | ConsumerCancelledException
 						| InterruptedException | ClassNotFoundException | IOException e2) {
 					Logger.getGlobal().log(Level.SEVERE, "Could not receive message");
 				}
 				
-								
-			    try {
-			    	byte[] payload = Util.serialize(resultAppData);
-					channel.basicPublish("", IQueueNames.COMMUNITY_POINTS, null, payload);
-					textArea.setText(resultAppData.toString());
-				} catch (IOException e1) {
-					Logger.getGlobal().log(Level.SEVERE, "Could not publish message: " + applicationData.toString());
-				}
 			}
 
 		});

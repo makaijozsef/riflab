@@ -15,6 +15,7 @@ public class ApplicationData implements Serializable{
 	private Double average;
 	private Integer roomNumber;
 	private Boolean isAdmitted;
+	private String timestamp;
 
 	private StudyResult result;
 	private SocialResult socialResult;
@@ -90,10 +91,23 @@ public class ApplicationData implements Serializable{
 	public void setSocialResult(SocialResult socialResult) {
 		this.socialResult = socialResult;
 	}
+	
+	public String getTimestamp() {
+		return timestamp;
+	}
+	
+	public void setTimestamp(String timestamp) {
+		this.timestamp = timestamp;
+	}
 
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
+		
+		builder.append("timestamp: ");
+		builder.append(timestamp);
+		builder.append('\n');
+		
 		builder.append("community points: ");
 		builder.append(communityPoints);
 		builder.append('\n');

@@ -49,10 +49,8 @@ public class AddCommunityPointsWindow extends AbstractWindow {
 				try {
 					QueueingConsumer.Delivery delivery = consumer.nextDelivery();
 					ApplicationData applicationData = (ApplicationData)Util.deserialize(delivery.getBody());
-					channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
 					
 					ApplicationData resultApplicantData = AddCommunityPoints.calculate(applicationData);
-					textArea.setText(resultApplicantData.toString());
 					
 					byte[] payload = Util.serialize(resultApplicantData);
 					if(resultApplicantData.getAverage() >= 3){
@@ -60,6 +58,10 @@ public class AddCommunityPointsWindow extends AbstractWindow {
 					} else {
 						channel.basicPublish("", IQueueNames.FINAL_RESULT_AD, null, payload);
 					}
+					
+					channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
+					
+					textArea.setText(resultApplicantData.toString());
 					
 				} catch (ShutdownSignalException | ConsumerCancelledException
 						| InterruptedException | ClassNotFoundException | IOException e1) {
@@ -83,10 +85,13 @@ public class AddCommunityPointsWindow extends AbstractWindow {
 					ApplicationData applicationData = (ApplicationData)Util.deserialize(delivery.getBody());
 					
 					ApplicationData resultApplicantData = AddCommunityPoints.calculate(applicationData);
-					textArea.setText(resultApplicantData.toString());
 					
 					byte[] payload = Util.serialize(resultApplicantData);
 					channel.basicPublish("", IQueueNames.COMMUNITY_POINTS_ROOM, null, payload);
+					
+					channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
+					
+					textArea.setText(resultApplicantData.toString());
 					
 				} catch (ShutdownSignalException | ConsumerCancelledException
 						| InterruptedException | ClassNotFoundException | IOException e1) {
@@ -108,10 +113,13 @@ public class AddCommunityPointsWindow extends AbstractWindow {
 					ApplicationData applicationData = (ApplicationData)Util.deserialize(delivery.getBody());
 					
 					ApplicationData resultApplicantData = AddCommunityPoints.calculate(applicationData);
-					textArea.setText(resultApplicantData.toString());
 					
 					byte[] payload = Util.serialize(resultApplicantData);
 					channel.basicPublish("", IQueueNames.FINAL_RESULT_AD, null, payload);
+					
+					channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
+					
+					textArea.setText(resultApplicantData.toString());
 					
 				} catch (ShutdownSignalException | ConsumerCancelledException
 						| InterruptedException | ClassNotFoundException | IOException e1) {

@@ -49,16 +49,16 @@ public class DetermineFinalResultWindow extends AbstractWindow {
 				try {
 					QueueingConsumer.Delivery delivery = appDataConsumer.nextDelivery();
 					ApplicationData applicationData = (ApplicationData)Util.deserialize(delivery.getBody());
-					channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
 					
 					QueueingConsumer.Delivery deliverySI = socialDataConsumer.nextDelivery();
 					SocialResult socialResult = (SocialResult)Util.deserialize(deliverySI.getBody());
-					channel.basicAck(deliverySI.getEnvelope().getDeliveryTag(), false);
 					
 					ApplicationData finalResult = DetermineFinalResult.decide(applicationData, socialResult);
 					
-					textArea.setText(finalResult.toString());
+					channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
+					channel.basicAck(deliverySI.getEnvelope().getDeliveryTag(), false);
 					
+					textArea.setText(finalResult.toString());
 					
 				} catch (ShutdownSignalException | ConsumerCancelledException
 						| InterruptedException | ClassNotFoundException | IOException e1) {

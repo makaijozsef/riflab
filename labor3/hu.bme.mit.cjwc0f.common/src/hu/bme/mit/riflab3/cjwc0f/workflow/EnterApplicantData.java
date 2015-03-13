@@ -1,6 +1,9 @@
 package hu.bme.mit.riflab3.cjwc0f.workflow;
 
 import static hu.bme.mit.riflab3.cjwc0f.workflow.Util.rand;
+
+import java.sql.Timestamp;
+
 import hu.bme.mit.riflab3.cjwc0f.data.ApplicationData;
 
 public class EnterApplicantData {
@@ -19,6 +22,8 @@ public class EnterApplicantData {
 		applicantData.setEarnings(earnings);
 
 		applicantData.setCommunityPoints(rand.nextInt(100));
+		
+		applicantData.setTimestamp(new Timestamp(System.currentTimeMillis()).toString());
 
 		return applicantData;
 	}

@@ -31,6 +31,10 @@ public class SocialResult implements Serializable{
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
+		
+		builder.append("timestamp: ");
+		builder.append(applicantData.getTimestamp());
+		builder.append('\n');
 
 		builder.append("roomNumber: ");
 		builder.append(roomNumber);

@@ -76,14 +76,16 @@ public class SocialInspectionWindow extends AbstractWindow {
 			public void actionPerformed(ActionEvent e) {
 				try {
 					ApplicationData applicationData = (ApplicationData)Util.deserialize(delivery.getBody());
-					// Sending ack back to the queue
-					channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
 					
 					SocialResult socialResult = SocialInspection.createResult(applicationData);
-					textArea.setText(socialResult.toString());
 					
 					byte[] payload = Util.serialize(socialResult);
 					channel.basicPublish("", IQueueNames.FINAL_RESULT_SI, null, payload);
+					
+					// Sending ack back to the queue
+					channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
+					
+					textArea.setText(socialResult.toString());
 					
 					button.setEnabled(true);
 					continueButton.setEnabled(false);

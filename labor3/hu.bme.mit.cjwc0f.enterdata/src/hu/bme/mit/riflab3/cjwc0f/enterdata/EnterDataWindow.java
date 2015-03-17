@@ -27,7 +27,7 @@ public class EnterDataWindow extends AbstractWindow {
 		
 		try {
 			//TODO obtain host from the command line arguments
-			createQueue(mqHost, IQueueNames.DETERMINE_AVERAGE);
+			createQueue(mqHost, IQueueNames.DETERMINE_AVERAGE, IQueueNames.SOCIAL_INSPECTION);
 		} catch (IOException e1) {
 			Logger.getGlobal().log(Level.SEVERE, "Could not create channel");
 			System.exit(ERROR);

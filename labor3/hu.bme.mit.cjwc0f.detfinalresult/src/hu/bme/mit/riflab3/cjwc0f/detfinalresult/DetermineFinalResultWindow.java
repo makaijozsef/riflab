@@ -50,8 +50,8 @@ public class DetermineFinalResultWindow extends AbstractWindow {
 			System.exit(ERROR);
 		}
 		
-		QueueingConsumer appDataConsumer = new QueueingConsumer(channel);
-		QueueingConsumer socialDataConsumer = new QueueingConsumer(channel);
+		final QueueingConsumer appDataConsumer = new QueueingConsumer(channel);
+		final QueueingConsumer socialDataConsumer = new QueueingConsumer(channel);
 	    try {
 			channel.basicConsume(IQueueNames.FINAL_RESULT_AD, false, appDataConsumer);
 			channel.basicConsume(IQueueNames.FINAL_RESULT_SI, false, socialDataConsumer);

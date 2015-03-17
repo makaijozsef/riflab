@@ -40,7 +40,7 @@ public class SocialInspectionWindow extends AbstractWindow {
 			System.exit(ERROR);
 		}
 		
-		QueueingConsumer consumer = new QueueingConsumer(channel);
+		final QueueingConsumer consumer = new QueueingConsumer(channel);
 	    try {
 	    	// TODO change second parameter to false to use the autoAck
 			channel.basicConsume(IQueueNames.SOCIAL_INSPECTION, false, consumer);
@@ -49,7 +49,7 @@ public class SocialInspectionWindow extends AbstractWindow {
 		}
 
 
-	    JButton continueButton = new JButton();
+	    final JButton continueButton = new JButton();
 	    continueButton.setEnabled(false);
 		continueButton.setText("Continue process!");
 	    
@@ -106,7 +106,7 @@ public class SocialInspectionWindow extends AbstractWindow {
 		this.getContentPane().add(continueButton, BorderLayout.EAST);
 		
 		
-		JButton killButton = new JButton();
+		final JButton killButton = new JButton();
 		killButton.setText("Kill process!");
 		killButton.addActionListener(new ActionListener() {
 

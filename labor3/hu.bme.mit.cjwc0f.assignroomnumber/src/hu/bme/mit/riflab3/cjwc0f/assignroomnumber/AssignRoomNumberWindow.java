@@ -34,7 +34,7 @@ public class AssignRoomNumberWindow extends AbstractWindow {
 			System.exit(ERROR);
 		}
 		
-		QueueingConsumer consumer = new QueueingConsumer(channel);
+		final QueueingConsumer consumer = new QueueingConsumer(channel);
 	    try {
 			channel.basicConsume(IQueueNames.COMMUNITY_POINTS_ROOM, false, consumer);
 		} catch (IOException e1) {

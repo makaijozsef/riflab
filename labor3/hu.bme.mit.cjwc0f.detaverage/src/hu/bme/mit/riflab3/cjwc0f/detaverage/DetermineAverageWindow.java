@@ -37,7 +37,7 @@ public class DetermineAverageWindow extends AbstractWindow {
 			System.exit(ERROR);
 		}
 		
-		QueueingConsumer consumer = new QueueingConsumer(channel);
+		final QueueingConsumer consumer = new QueueingConsumer(channel);
 	    try {
 			channel.basicConsume(IQueueNames.DETERMINE_AVERAGE, false, consumer);
 		} catch (IOException e1) {

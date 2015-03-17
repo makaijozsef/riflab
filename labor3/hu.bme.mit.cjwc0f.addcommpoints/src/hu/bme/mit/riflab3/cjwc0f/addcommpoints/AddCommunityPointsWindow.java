@@ -37,7 +37,7 @@ public class AddCommunityPointsWindow extends AbstractWindow {
 			System.exit(ERROR);
 		}
 		
-		QueueingConsumer consumer = new QueueingConsumer(channel);
+		final QueueingConsumer consumer = new QueueingConsumer(channel);
 	    try {
 			channel.basicConsume(IQueueNames.COMMUNITY_POINTS, false, consumer);
 		} catch (IOException e1) {

@@ -10,11 +10,9 @@ import java.util.logging.Logger;
 
 import javax.jms.Connection;
 import javax.jms.JMSException;
-import javax.jms.Queue;
 import javax.jms.QueueConnection;
 import javax.jms.QueueConnectionFactory;
 import javax.jms.Session;
-import javax.jms.Topic;
 import javax.jms.TopicConnectionFactory;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;

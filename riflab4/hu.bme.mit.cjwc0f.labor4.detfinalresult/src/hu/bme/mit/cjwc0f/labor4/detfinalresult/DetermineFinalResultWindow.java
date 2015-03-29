@@ -15,10 +15,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.jms.JMSException;
+import javax.jms.MessageConsumer;
 import javax.jms.ObjectMessage;
-import javax.jms.Queue;
-import javax.jms.QueueReceiver;
-import javax.jms.QueueSession;
+import javax.jms.Topic;
 import javax.naming.NamingException;
 import javax.swing.JButton;
 import javax.swing.SwingWorker;
@@ -114,10 +113,10 @@ public class DetermineFinalResultWindow extends AbstractWindow {
 	
 	private List<ApplicationData> applicationDatas = new ArrayList<ApplicationData>();
 	private List<SocialResult> socialResults = new ArrayList<SocialResult>();
-	private Queue inputRoomQueue;
-	private QueueReceiver roomReceiver;
-	private Queue inputSocialQueue;
-	private QueueReceiver socialReceiver;
+	private Topic inputRoomQueue;
+	private MessageConsumer roomReceiver;
+	private Topic inputSocialQueue;
+	private MessageConsumer socialReceiver;
 	
 	private ObjectMessage receivedStudyMessage;
 	private ObjectMessage receivedSocialMessage;
@@ -137,10 +136,10 @@ public class DetermineFinalResultWindow extends AbstractWindow {
 
 		createQueueSession();
 		try {
-			inputRoomQueue = (Queue) initialContext.lookup("queue/finalResultQueue");
-			roomReceiver = ((QueueSession)session).createReceiver(inputRoomQueue);
-			inputSocialQueue = (Queue) initialContext.lookup("queue/socialInspectionQueue");
-			socialReceiver = ((QueueSession)session).createReceiver(inputSocialQueue);
+			inputRoomQueue = (Topic) initialContext.lookup("topic/finalResult");
+			roomReceiver = session.createConsumer(inputRoomQueue);
+			inputSocialQueue = (Topic) initialContext.lookup("topic/socialInspection");
+			socialReceiver = session.createConsumer(inputSocialQueue);
 		} catch (NamingException e) {
 			Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).log(Level.SEVERE, "Problem occured with the JNDI: " + e.getMessage());
 		} catch (JMSException e1) {

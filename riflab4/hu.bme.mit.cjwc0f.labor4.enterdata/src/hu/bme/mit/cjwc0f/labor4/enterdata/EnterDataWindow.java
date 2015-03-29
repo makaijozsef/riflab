@@ -14,9 +14,6 @@ import java.util.logging.Logger;
 import javax.jms.JMSException;
 import javax.jms.MessageProducer;
 import javax.jms.ObjectMessage;
-import javax.jms.Queue;
-import javax.jms.QueueSender;
-import javax.jms.QueueSession;
 import javax.jms.Topic;
 import javax.naming.NamingException;
 import javax.swing.JButton;
@@ -26,10 +23,10 @@ public class EnterDataWindow extends AbstractWindow {
 	
 	private Topic topic;
 	private MessageProducer producer;
-	private Queue queueAverage;
-	private QueueSender senderAverage;
-	private Queue queueSocial;
-	private QueueSender senderSocial;
+	private Topic topicAverage;
+	private MessageProducer producerAverage;
+	private Topic topicSocial;
+	private MessageProducer producerSocial;
 
 	public EnterDataWindow(){
 		super("Enter applicant data", 0, 300);
@@ -51,10 +48,10 @@ public class EnterDataWindow extends AbstractWindow {
 	private void queueSolution(JButton button) {
 		createQueueSession();
 		try {
-			queueAverage = (Queue) initialContext.lookup("queue/enterDataQueueAverage");
-			senderAverage = ((QueueSession)session).createSender(queueAverage);
-			queueSocial = (Queue) initialContext.lookup("queue/enterDataQueueSocial");
-			senderSocial = ((QueueSession)session).createSender(queueSocial);
+			topicAverage = (Topic) initialContext.lookup("topic/enterDataAverage");
+			producerAverage = session.createProducer(topicAverage);
+			topicSocial = (Topic) initialContext.lookup("topic/enterDataSocial");
+			producerSocial = session.createProducer(topicSocial);
 		} catch (NamingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -72,8 +69,8 @@ public class EnterDataWindow extends AbstractWindow {
 				
 				try {
 		        	ObjectMessage message = session.createObjectMessage(applicationData);
-					senderAverage.send(message);
-					senderSocial.send(message);
+					producerAverage.send(message);
+					producerSocial.send(message);
 					textArea.setText(applicationData.toString());
 				} catch (JMSException e1) {
 					Logger.global.log(Level.SEVERE, "Could not publish message: " + e1.getMessage());

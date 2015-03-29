@@ -12,11 +12,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.jms.JMSException;
+import javax.jms.MessageConsumer;
+import javax.jms.MessageProducer;
 import javax.jms.ObjectMessage;
-import javax.jms.Queue;
-import javax.jms.QueueReceiver;
-import javax.jms.QueueSender;
-import javax.jms.QueueSession;
+import javax.jms.Topic;
 import javax.naming.NamingException;
 import javax.swing.SwingWorker;
 
@@ -52,10 +51,10 @@ public class SocialInspectionWindow extends AbstractWindow {
 
 	}
 
-	private Queue inputQueue;
-	private QueueSender sender;
-	private Queue outputQueue;
-	private QueueReceiver receiver;
+	private Topic inputQueue;
+	private MessageProducer sender;
+	private Topic outputQueue;
+	private MessageConsumer receiver;
 	private ObjectMessage receivedMessage;
 	private boolean firstClick = true;
 	
@@ -67,10 +66,10 @@ public class SocialInspectionWindow extends AbstractWindow {
 		
 		createQueueSession();
 		try {
-			inputQueue = (Queue) initialContext.lookup("queue/enterDataQueueSocial");
-			receiver = ((QueueSession)session).createReceiver(inputQueue);
-			outputQueue = (Queue) initialContext.lookup("queue/socialInspectionQueue");
-			sender = ((QueueSession)session).createSender(outputQueue);
+			inputQueue = (Topic) initialContext.lookup("topic/enterDataSocial");
+			receiver = session.createConsumer(inputQueue);
+			outputQueue = (Topic) initialContext.lookup("topic/socialInspection");
+			sender = session.createProducer(outputQueue);
 		} catch (NamingException e) {
 			Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).log(Level.SEVERE, "Problem occured with the JNDI: " + e.getMessage());
 		} catch (JMSException e1) {

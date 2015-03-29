@@ -10,11 +10,10 @@ import java.awt.event.ActionListener;
 import java.lang.management.ManagementFactory;
 
 import javax.jms.JMSException;
+import javax.jms.MessageConsumer;
+import javax.jms.MessageProducer;
 import javax.jms.ObjectMessage;
-import javax.jms.Queue;
-import javax.jms.QueueReceiver;
-import javax.jms.QueueSender;
-import javax.jms.QueueSession;
+import javax.jms.Topic;
 import javax.naming.NamingException;
 import javax.swing.JButton;
 import javax.swing.SwingWorker;
@@ -75,12 +74,12 @@ public class AddCommunityPointsWindow extends AbstractWindow {
 		}
 	}
 	
-	private Queue inputQueue;
-	private QueueReceiver receiver;
-	private Queue outputRoomQueue;
-	private QueueSender senderRoom;
-	private Queue outputFinalQueue;
-	private QueueSender senderFinal;
+//	private Queue inputQueue;
+	private MessageConsumer receiver;
+//	private Queue outputRoomQueue;
+	private MessageProducer senderRoom;
+//	private Queue outputFinalQueue;
+	private MessageProducer senderFinal;
 	
 
 	private boolean firstClickStudy;
@@ -97,12 +96,12 @@ public class AddCommunityPointsWindow extends AbstractWindow {
 		
 		createQueueSession();
 		try {
-			inputQueue = (Queue) initialContext.lookup("queue/determineAverageQueue");
-			receiver = ((QueueSession)session).createReceiver(inputQueue);
-			outputRoomQueue = (Queue) initialContext.lookup("queue/roomAssignmentQueue");
-			senderRoom = ((QueueSession)session).createSender(outputRoomQueue);
-			outputFinalQueue = (Queue) initialContext.lookup("queue/finalResultQueue");
-			senderFinal = ((QueueSession)session).createSender(outputFinalQueue);
+			Topic inputQueue = (Topic) initialContext.lookup("topic/determineAverage");
+			receiver = session.createConsumer(inputQueue);
+			Topic outputRoomQueue = (Topic) initialContext.lookup("topic/roomAssignment");
+			senderRoom = session.createProducer(outputRoomQueue);
+			Topic outputFinalQueue = (Topic) initialContext.lookup("topic/finalResult");
+			senderFinal = session.createProducer(outputFinalQueue);
 		} catch (NamingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -181,5 +180,7 @@ public class AddCommunityPointsWindow extends AbstractWindow {
 		this.getContentPane().add(buttonFalse, BorderLayout.WEST);
 
 	}
+	
+
 
 }

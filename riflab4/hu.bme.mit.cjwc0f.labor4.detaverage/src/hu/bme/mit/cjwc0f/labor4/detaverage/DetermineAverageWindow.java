@@ -9,11 +9,10 @@ import java.awt.event.ActionListener;
 import java.lang.management.ManagementFactory;
 
 import javax.jms.JMSException;
+import javax.jms.MessageConsumer;
+import javax.jms.MessageProducer;
 import javax.jms.ObjectMessage;
-import javax.jms.Queue;
-import javax.jms.QueueReceiver;
-import javax.jms.QueueSender;
-import javax.jms.QueueSession;
+import javax.jms.Topic;
 import javax.naming.NamingException;
 import javax.swing.SwingWorker;
 
@@ -50,10 +49,10 @@ public class DetermineAverageWindow extends AbstractWindow {
 		}
 	}
 	
-	private Queue inputQueue;
-	private QueueReceiver receiver;
-	private Queue outputQueue;
-	private QueueSender sender;
+	private Topic inputQueue;
+	private MessageConsumer receiver;
+	private Topic outputQueue;
+	private MessageProducer sender;
 
 	private boolean firstClick = true;
 
@@ -69,10 +68,10 @@ public class DetermineAverageWindow extends AbstractWindow {
 		
 		createQueueSession();
 		try {
-			inputQueue = (Queue) initialContext.lookup("queue/enterDataQueueAverage");
-			receiver = ((QueueSession)session).createReceiver(inputQueue);
-			outputQueue = (Queue) initialContext.lookup("queue/determineAverageQueue");
-			sender = ((QueueSession)session).createSender(outputQueue);
+			inputQueue = (Topic) initialContext.lookup("topic/enterDataAverage");
+			receiver = session.createConsumer(inputQueue);
+			outputQueue = (Topic) initialContext.lookup("topic/determineAverage");
+			sender = session.createProducer(outputQueue);
 		} catch (NamingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

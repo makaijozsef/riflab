@@ -1,8 +1,8 @@
 package hu.bme.mit.cjwc0f.labor4.workflow;
 
+import static hu.bme.mit.cjwc0f.labor4.workflow.Util.rand;
 import hu.bme.mit.cjwc0f.labor4.data.ApplicationData;
 import hu.bme.mit.cjwc0f.labor4.data.StudyResult;
-import static hu.bme.mit.cjwc0f.labor4.workflow.Util.rand;
 
 public class AssignRoomNumber {
 	

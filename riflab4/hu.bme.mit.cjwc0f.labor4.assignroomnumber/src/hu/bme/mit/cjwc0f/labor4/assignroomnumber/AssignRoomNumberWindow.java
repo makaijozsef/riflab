@@ -9,11 +9,11 @@ import java.awt.event.ActionListener;
 import java.lang.management.ManagementFactory;
 
 import javax.jms.JMSException;
+import javax.jms.MessageConsumer;
+import javax.jms.MessageProducer;
 import javax.jms.ObjectMessage;
-import javax.jms.Queue;
-import javax.jms.QueueReceiver;
-import javax.jms.QueueSender;
 import javax.jms.QueueSession;
+import javax.jms.Topic;
 import javax.naming.NamingException;
 import javax.swing.SwingWorker;
 
@@ -52,10 +52,8 @@ public class AssignRoomNumberWindow extends AbstractWindow {
 	}
 	
 	
-	private Queue inputQueue;
-	private QueueReceiver receiver;
-	private Queue outputQueue;
-	private QueueSender sender;
+	private MessageConsumer receiver;
+	private MessageProducer sender;
 	
 
 	private ObjectMessage receivedMessage;
@@ -71,10 +69,10 @@ public class AssignRoomNumberWindow extends AbstractWindow {
 		
 		createQueueSession();
 		try {
-			inputQueue = (Queue) initialContext.lookup("queue/roomAssignmentQueue");
-			receiver = ((QueueSession)session).createReceiver(inputQueue);
-			outputQueue = (Queue) initialContext.lookup("queue/finalResultQueue");
-			sender = ((QueueSession)session).createSender(outputQueue);
+			Topic inputTopic = (Topic)initialContext.lookup("topic/roomAssignment");
+			receiver = session.createConsumer(inputTopic);
+			Topic outputTopic = (Topic) initialContext.lookup("topic/finalResult");
+			sender = ((QueueSession)session).createProducer(outputTopic);
 		} catch (NamingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

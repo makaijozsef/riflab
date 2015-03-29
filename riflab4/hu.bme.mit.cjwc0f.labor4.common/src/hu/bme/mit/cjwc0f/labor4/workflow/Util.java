@@ -1,12 +1,11 @@
 package hu.bme.mit.cjwc0f.labor4.workflow;
 
-import java.util.Random;
-
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.Random;
 
 public class Util {
 

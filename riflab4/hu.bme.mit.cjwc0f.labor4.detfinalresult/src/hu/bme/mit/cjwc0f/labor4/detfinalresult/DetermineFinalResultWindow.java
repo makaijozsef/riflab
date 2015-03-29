@@ -3,7 +3,6 @@ package hu.bme.mit.cjwc0f.labor4.detfinalresult;
 import hu.bme.mit.cjwc0f.labor4.data.ApplicationData;
 import hu.bme.mit.cjwc0f.labor4.data.SocialResult;
 import hu.bme.mit.cjwc0f.labor4.gui.AbstractWindow;
-import hu.bme.mit.cjwc0f.labor4.workflow.DetermineAverage;
 import hu.bme.mit.cjwc0f.labor4.workflow.DetermineFinalResult;
 
 import java.awt.BorderLayout;
@@ -19,13 +18,99 @@ import javax.jms.JMSException;
 import javax.jms.ObjectMessage;
 import javax.jms.Queue;
 import javax.jms.QueueReceiver;
-import javax.jms.QueueSender;
 import javax.jms.QueueSession;
 import javax.naming.NamingException;
 import javax.swing.JButton;
+import javax.swing.SwingWorker;
 
 @SuppressWarnings("serial")
 public class DetermineFinalResultWindow extends AbstractWindow {
+	
+	private final class SwingWorkerStudyExtension extends SwingWorker<Void, Void> {
+
+		@Override
+		protected Void doInBackground() throws Exception {
+			button.setEnabled(false);
+			if(receivedStudyMessage == null){
+				receivedStudyMessage = (ObjectMessage) roomReceiver.receiveNoWait();
+			}
+			while (receivedStudyMessage == null) {
+				Thread.sleep(200);
+				receivedStudyMessage = (ObjectMessage) roomReceiver.receiveNoWait();
+			}
+			
+			ApplicationData applicationData = (ApplicationData) receivedStudyMessage.getObject();
+			
+			SocialResult matchingSR = null;
+			for (SocialResult sr : socialResults) {
+				if(applicationData.getTimestamp().equals(sr.getApplicantData().getTimestamp())){
+					matchingSR = sr;
+					break;
+				}
+			}
+			if(matchingSR != null){
+				socialResults.remove(matchingSR);
+				ApplicationData finalResult = DetermineFinalResult.decide(applicationData, matchingSR);
+				
+				textArea.setText(finalResult.toString());
+			}
+			else {
+				applicationDatas.add(applicationData);
+			}
+			receivedStudyMessage = (ObjectMessage) roomReceiver.receiveNoWait();
+			while (receivedStudyMessage == null) {
+				Thread.sleep(200);
+				receivedStudyMessage = (ObjectMessage) roomReceiver.receiveNoWait();
+			}
+			button.setEnabled(true);
+			return null;
+			
+		}
+	}
+	private final class SwingWorkerSocialExtension extends SwingWorker<Void, Void> {
+		
+		@Override
+		protected Void doInBackground() throws Exception {
+			socialButton.setEnabled(false);
+			if(receivedSocialMessage == null){
+				receivedSocialMessage = (ObjectMessage) socialReceiver.receiveNoWait();
+			}
+			while (receivedSocialMessage == null) {
+				Thread.sleep(200);
+				receivedSocialMessage = (ObjectMessage) socialReceiver.receiveNoWait();
+			}
+			
+			SocialResult socialResult = (SocialResult) receivedSocialMessage.getObject();
+			
+			ApplicationData matchingAD = null;
+			for (ApplicationData ad : applicationDatas) {
+				if(ad.getTimestamp().equals(socialResult.getApplicantData().getTimestamp())){
+					matchingAD = ad;
+					break;
+				}
+			}
+			if(matchingAD != null){
+				applicationDatas.remove(matchingAD);
+				ApplicationData finalResult = DetermineFinalResult.decide(matchingAD, socialResult);
+				
+				textArea.setText(finalResult.toString());
+			}
+			else {
+				socialResults.add(socialResult);
+			}
+					
+					
+			receivedSocialMessage = (ObjectMessage) socialReceiver.receiveNoWait();
+			while (receivedSocialMessage == null) {
+				Thread.sleep(200);
+				receivedSocialMessage = (ObjectMessage) socialReceiver.receiveNoWait();
+			}
+			socialButton.setEnabled(true);
+			return null;
+			
+		}
+		
+	}
 	
 	private List<ApplicationData> applicationDatas = new ArrayList<ApplicationData>();
 	private List<SocialResult> socialResults = new ArrayList<SocialResult>();
@@ -33,6 +118,15 @@ public class DetermineFinalResultWindow extends AbstractWindow {
 	private QueueReceiver roomReceiver;
 	private Queue inputSocialQueue;
 	private QueueReceiver socialReceiver;
+	
+	private ObjectMessage receivedStudyMessage;
+	private ObjectMessage receivedSocialMessage;
+
+	
+	
+	private boolean firstClickStudy = true;
+	private boolean firstClickSocial = true;
+	private JButton socialButton;
 	
 	public DetermineFinalResultWindow() {
 		
@@ -48,87 +142,62 @@ public class DetermineFinalResultWindow extends AbstractWindow {
 			inputSocialQueue = (Queue) initialContext.lookup("queue/socialInspectionQueue");
 			socialReceiver = ((QueueSession)session).createReceiver(inputSocialQueue);
 		} catch (NamingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).log(Level.SEVERE, "Problem occured with the JNDI: " + e.getMessage());
 		} catch (JMSException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).log(Level.SEVERE, "Error with creating receiver/sender: " + e1.getMessage());
 		}
 		
 
 	    button.setText("Consume from study part");
 		button.addActionListener(new ActionListener() {
-
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				try {
-					ObjectMessage receive = ((ObjectMessage)roomReceiver.receive());
-					ApplicationData applicationData = (ApplicationData) receive.getObject();
-					
-					SocialResult matchingSR = null;
-					for (SocialResult sr : socialResults) {
-						if(applicationData.getTimestamp().equals(sr.getApplicantData().getTimestamp())){
-							matchingSR = sr;
-							break;
-						}
+				
+				SwingWorker<Void, Void> messageReader = new SwingWorkerStudyExtension();
+				if (firstClickStudy) {
+					// Only for init
+					firstClickStudy = false;
+					messageReader.execute();
+					if(receivedStudyMessage == null){
+						textArea.setText("The first input is not ready yet.");
 					}
-					if(matchingSR != null){
-						socialResults.remove(matchingSR);
-						ApplicationData finalResult = DetermineFinalResult.decide(applicationData, matchingSR);
-						
-						textArea.setText(finalResult.toString());
-					}
-					else {
-						applicationDatas.add(applicationData);
-					}
-					
-				} catch (JMSException e1) {
-					Logger.global.log(Level.SEVERE, "Could not publish message: " + e1.getMessage());
+				} else {
+					messageReader.execute();
 				}
+				
+				
 			}
 
 		});
 		
 		this.getContentPane().add(button, BorderLayout.WEST);
 		
-		JButton socialButton = new JButton();
+		socialButton = new JButton();
 		socialButton.setText("Consume from social part");
 		
 		socialButton.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				try {
-					ObjectMessage receive = ((ObjectMessage)socialReceiver.receive());
-					SocialResult socialResult = (SocialResult) receive.getObject();
-					
-					ApplicationData matchingAD = null;
-					for (ApplicationData ad : applicationDatas) {
-						if(ad.getTimestamp().equals(socialResult.getApplicantData().getTimestamp())){
-							matchingAD = ad;
-							break;
-						}
+
+				SwingWorker<Void, Void> messageReader = new SwingWorkerSocialExtension();
+				if (firstClickSocial) {
+					// Only for init
+					firstClickSocial = false;
+					messageReader.execute();
+					if (receivedStudyMessage == null) {
+						textArea.setText("The first input is not ready yet.");
 					}
-					if(matchingAD != null){
-						applicationDatas.remove(matchingAD);
-						ApplicationData finalResult = DetermineFinalResult.decide(matchingAD, socialResult);
-						
-						textArea.setText(finalResult.toString());
-					}
-					else {
-						socialResults.add(socialResult);
-					}
-					
-				} catch (JMSException e1) {
-					Logger.global.log(Level.SEVERE, "Could not publish message: " + e1.getMessage());
+				} else {
+					messageReader.execute();
 				}
+
 			}
 
 		});
-		
+
 		this.getContentPane().add(socialButton, BorderLayout.EAST);
-		
-		
+
 	}
 
 }

@@ -3,14 +3,11 @@ package hu.bme.mit.cjwc0f.labor4.addcommpoints;
 import hu.bme.mit.cjwc0f.labor4.data.ApplicationData;
 import hu.bme.mit.cjwc0f.labor4.gui.AbstractWindow;
 import hu.bme.mit.cjwc0f.labor4.workflow.AddCommunityPoints;
-import hu.bme.mit.cjwc0f.labor4.workflow.DetermineAverage;
 
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.lang.management.ManagementFactory;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.jms.JMSException;
 import javax.jms.ObjectMessage;
@@ -20,16 +17,77 @@ import javax.jms.QueueSender;
 import javax.jms.QueueSession;
 import javax.naming.NamingException;
 import javax.swing.JButton;
+import javax.swing.SwingWorker;
 
 @SuppressWarnings("serial")
 public class AddCommunityPointsWindow extends AbstractWindow {
 
+	private final class SwingWorkerExtension extends SwingWorker<Void, Void> {
+
+		private Boolean b;
+
+		public SwingWorkerExtension(Boolean b) {
+			this.b = b;
+		}
+		
+		@Override
+		protected Void doInBackground() throws Exception {
+			button.setEnabled(false);
+			buttonTrue.setEnabled(false);
+			buttonFalse.setEnabled(false);
+			if(receivedMessage == null){
+				receivedMessage = (ObjectMessage) receiver.receiveNoWait();
+			}
+			while (receivedMessage == null) {
+				Thread.sleep(200);
+				receivedMessage = (ObjectMessage) receiver.receiveNoWait();
+			}
+			
+			
+			ApplicationData applicantData = (ApplicationData) receivedMessage.getObject();
+			ApplicationData resultData = AddCommunityPoints.calculate(applicantData);
+			
+			ObjectMessage message = session.createObjectMessage(resultData);
+			if(b == null){				
+				if(resultData.getAverage() >= 3){
+					senderRoom.send(message);
+				} else {
+					senderFinal.send(message);
+				}
+			} else if (b == false){
+				senderFinal.send(message);
+			} else if (b == true){
+				senderRoom.send(message);
+			}
+			textArea.setText(resultData.toString());
+			
+			receivedMessage = (ObjectMessage) receiver.receiveNoWait();
+			while (receivedMessage == null) {
+				Thread.sleep(200);
+				receivedMessage = (ObjectMessage) receiver.receiveNoWait();
+			}
+
+			button.setEnabled(true);
+			buttonTrue.setEnabled(true);
+			buttonFalse.setEnabled(true);
+			return null;
+			
+		}
+	}
+	
 	private Queue inputQueue;
 	private QueueReceiver receiver;
 	private Queue outputRoomQueue;
 	private QueueSender senderRoom;
 	private Queue outputFinalQueue;
 	private QueueSender senderFinal;
+	
+
+	private boolean firstClickStudy;
+
+	private ObjectMessage receivedMessage;
+	private JButton buttonTrue;
+	private JButton buttonFalse;
 
 	public AddCommunityPointsWindow() {
 		super("Add community points", 700, 100);
@@ -56,73 +114,66 @@ public class AddCommunityPointsWindow extends AbstractWindow {
 		
 		button.addActionListener(new ActionListener() {
 			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				
-				try {
-					ObjectMessage receive = ((ObjectMessage)receiver.receive());
-					ApplicationData applicantData = (ApplicationData) receive.getObject();
-					ApplicationData resultData = AddCommunityPoints.calculate(applicantData);
-					
-					ObjectMessage message = session.createObjectMessage(resultData);
-					if(resultData.getAverage() >= 3){
-						senderRoom.send(message);
-					} else {
-						senderFinal.send(message);
+				SwingWorker<Void, Void> messageReader = new SwingWorkerExtension(null);
+				if (firstClickStudy) {
+					// Only for init
+					firstClickStudy = false;
+					messageReader.execute();
+					if(receivedMessage == null){
+						textArea.setText("The first input is not ready yet.");
 					}
-					textArea.setText(resultData.toString());
-					
-				} catch (JMSException e1) {
-					Logger.global.log(Level.SEVERE, "Could not publish message: " + e1.getMessage());
+				} else {
+					messageReader.execute();
 				}
 			}
 			
 		});
 
 
-		JButton buttonTrue = new JButton();
+		buttonTrue = new JButton();
 		buttonTrue.setText("Go to room assignment");
 		buttonTrue.addActionListener(new ActionListener() {
+
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
 
-				try {
-					ObjectMessage receive = ((ObjectMessage)receiver.receive());
-					ApplicationData applicantData = (ApplicationData) receive.getObject();
-					ApplicationData resultData = AddCommunityPoints.calculate(applicantData);
-					
-					ObjectMessage message = session.createObjectMessage(resultData);
-					senderRoom.send(message);
-					textArea.setText(resultData.toString());
-				
-				} catch (JMSException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
+				SwingWorker<Void, Void> messageReader = new SwingWorkerExtension(true);
+				if (firstClickStudy) {
+					// Only for init
+					firstClickStudy = false;
+					messageReader.execute();
+					if(receivedMessage == null){
+						textArea.setText("The first input is not ready yet.");
+					}
+				} else {
+					messageReader.execute();
 				}
 			}
 
 		});
 		this.getContentPane().add(buttonTrue, BorderLayout.EAST);
 
-		JButton buttonFalse = new JButton();
+		buttonFalse = new JButton();
 		buttonFalse.setText("Skip room assignment");
 		buttonFalse.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				try {
-					ObjectMessage receive = ((ObjectMessage)receiver.receive());
-					ApplicationData applicantData = (ApplicationData) receive.getObject();
-					ApplicationData resultData = AddCommunityPoints.calculate(applicantData);
-					
-					ObjectMessage message = session.createObjectMessage(resultData);
-					senderFinal.send(message);
-					textArea.setText(resultData.toString());
-					
-				} catch (JMSException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
+				SwingWorker<Void, Void> messageReader = new SwingWorkerExtension(false);
+				if (firstClickStudy) {
+					// Only for init
+					firstClickStudy = false;
+					messageReader.execute();
+					if(receivedMessage == null){
+						textArea.setText("The first input is not ready yet.");
+					}
+				} else {
+					messageReader.execute();
 				}
 			}
 

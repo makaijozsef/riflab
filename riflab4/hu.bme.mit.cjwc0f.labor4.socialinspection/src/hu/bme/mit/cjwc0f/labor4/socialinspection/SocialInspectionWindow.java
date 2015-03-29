@@ -8,6 +8,8 @@ import hu.bme.mit.cjwc0f.labor4.workflow.SocialInspection;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.lang.management.ManagementFactory;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.jms.JMSException;
 import javax.jms.ObjectMessage;
@@ -22,6 +24,7 @@ import javax.swing.SwingWorker;
 public class SocialInspectionWindow extends AbstractWindow {
 	
 	private final class SwingWorkerExtension extends SwingWorker<Void, Void> {
+		
 		@Override
 		protected Void doInBackground() throws Exception {
 			button.setEnabled(false);
@@ -69,11 +72,9 @@ public class SocialInspectionWindow extends AbstractWindow {
 			outputQueue = (Queue) initialContext.lookup("queue/socialInspectionQueue");
 			sender = ((QueueSession)session).createSender(outputQueue);
 		} catch (NamingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).log(Level.SEVERE, "Problem occured with the JNDI: " + e.getMessage());
 		} catch (JMSException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).log(Level.SEVERE, "Error with creating receiver/sender: " + e1.getMessage());
 		}
 
 		receivedMessage = null;

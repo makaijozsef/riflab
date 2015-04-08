@@ -8,6 +8,7 @@ import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.lang.management.ManagementFactory;
+import java.util.Queue;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -16,7 +17,7 @@ import javax.swing.JButton;
 @SuppressWarnings("serial")
 public class EnterDataWindow extends AbstractWindow {
 
-	public EnterDataWindow() {
+	public EnterDataWindow(Queue<ApplicationData> socialQueue, Queue<ApplicationData> detaverageQueue) {
 		super("Enter applicant data", 0, 300);
 
 		final String jvmName = ManagementFactory.getRuntimeMXBean().getName();
@@ -31,6 +32,11 @@ public class EnterDataWindow extends AbstractWindow {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				ApplicationData applicationData = EnterApplicantData.generate();
+				
+				socialQueue.add(applicationData);
+				detaverageQueue.add(applicationData);
+				
+				textArea.setText(applicationData.toString());
 
 			}
 

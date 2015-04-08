@@ -1,0 +1,35 @@
+package hu.bme.mit.cjwc0f.labor4.detaverage;
+
+import hu.bme.mit.cjwc0f.labor5.data.ApplicationData;
+import hu.bme.mit.cjwc0f.labor5.gui.AbstractWindow;
+import hu.bme.mit.cjwc0f.labor5.workflow.DetermineAverage;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.lang.management.ManagementFactory;
+
+
+@SuppressWarnings("serial")
+public class DetermineAverageWindow extends AbstractWindow {
+
+
+	public DetermineAverageWindow() {
+		super("Determine average", 350, 100);
+		
+		final String jvmName = ManagementFactory.getRuntimeMXBean().getName();
+		this.setTitle("Determine average - " + jvmName);
+
+		
+		button.addActionListener(new ActionListener() {
+			
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				
+			}
+			
+		});
+		
+	}
+
+}

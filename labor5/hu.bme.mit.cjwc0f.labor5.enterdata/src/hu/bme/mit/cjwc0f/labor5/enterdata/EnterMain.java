@@ -38,8 +38,8 @@ public class EnterMain {
 		Queue<ApplicationData> socialQueue = new LinkedList<ApplicationData>();
 		Queue<ApplicationData> detaverageQueue = new LinkedList<ApplicationData>();
 		
-		final SenderActorCreator creator = new SenderActorCreator("localhost", IAkkaNames.SOCIAL_ACTOR, 2552, IAkkaNames.SOCIAL_SYSTEM, socialQueue);
-		final SenderActorCreator creator2 = new SenderActorCreator("localhost", IAkkaNames.DETAVERAGE_ACTOR, 2553, IAkkaNames.DETAVERAGE_SYSTEM, detaverageQueue);
+		final SenderActorCreator creator = new SenderActorCreator("localhost", IAkkaNames.SOCIAL_ACTOR, IAkkaNames.SOCIAL_INSPECTION_PORT, IAkkaNames.SOCIAL_SYSTEM, socialQueue);
+		final SenderActorCreator creator2 = new SenderActorCreator("localhost", IAkkaNames.DETAVERAGE_ACTOR, IAkkaNames.DET_AVERAGE_PORT, IAkkaNames.DETAVERAGE_SYSTEM, detaverageQueue);
 		
 		system.actorOf(Props.create(creator), "enteractor1");
 		system.actorOf(Props.create(creator2), "enteractor2");

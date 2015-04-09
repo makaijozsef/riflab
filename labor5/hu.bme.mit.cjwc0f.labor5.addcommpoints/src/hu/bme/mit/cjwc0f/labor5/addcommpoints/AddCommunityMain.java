@@ -42,7 +42,7 @@ public class AddCommunityMain {
 		Queue<ApplicationData> outQueueFinal= new LinkedList<ApplicationData>();
 		
 		final ReceiverActorCreator receiverCreator = new ReceiverActorCreator(inQueue);
-		final SenderActorCreator toAssignCreator = new SenderActorCreator("127.0.0.1", IAkkaNames.ASSIGNROOM_ACTOR, IAkkaNames.ADD_COMM_POINTS_PORT, IAkkaNames.ASSIGNROOM_SYSTEM, outQueueAssign);
+		final SenderActorCreator toAssignCreator = new SenderActorCreator("127.0.0.1", IAkkaNames.ASSIGNROOM_ACTOR, IAkkaNames.ASSIGN_ROOM_PORT, IAkkaNames.ASSIGNROOM_SYSTEM, outQueueAssign);
 		final SenderActorCreator toFinalCreator = new SenderActorCreator("127.0.0.1", IAkkaNames.FINAL_STUDY_ACTOR, IAkkaNames.FINAL_RESULT_PORT, IAkkaNames.FINAL_RESULT_SYSTEM, outQueueFinal);
 		
 		system.actorOf(Props.create(toAssignCreator), "sender");

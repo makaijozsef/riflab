@@ -63,10 +63,10 @@ public class SenderActor extends UntypedActor {
 
 	public void send() throws InterruptedException {
 		while (true) {
-			Serializable message = queue.poll();
-			if (message != null) {
-				synchronized (this) {
-					if (remotePair != null) {
+			synchronized (this) {
+				if (remotePair != null) {
+					Serializable message = queue.poll();
+					if (message != null) {
 						byte[] serializedData = null;
 						try {
 							serializedData = Util.serialize(message);
@@ -78,7 +78,7 @@ public class SenderActor extends UntypedActor {
 					}
 				}
 			}
-			
+
 			Thread.sleep(500);
 		}
 	}

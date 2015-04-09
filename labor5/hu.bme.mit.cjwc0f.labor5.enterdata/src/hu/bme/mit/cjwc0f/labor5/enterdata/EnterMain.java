@@ -1,13 +1,13 @@
 package hu.bme.mit.cjwc0f.labor5.enterdata;
 
-import java.util.LinkedList;
-import java.util.Queue;
-
 import hu.bme.mit.cjwc0f.labor5.akka.SenderActor;
 import hu.bme.mit.cjwc0f.labor5.akka.SenderActorCreator;
 import hu.bme.mit.cjwc0f.labor5.data.ApplicationData;
 import hu.bme.mit.cjwc0f.labor5.names.IAkkaNames;
-import akka.actor.ActorRef;
+
+import java.util.LinkedList;
+import java.util.Queue;
+
 import akka.actor.ActorSystem;
 import akka.actor.Props;
 
@@ -38,8 +38,8 @@ public class EnterMain {
 		Queue<ApplicationData> socialQueue = new LinkedList<ApplicationData>();
 		Queue<ApplicationData> detaverageQueue = new LinkedList<ApplicationData>();
 		
-		final SenderActorCreator creator = new SenderActorCreator("localhost", IAkkaNames.SOCIAL_ACTOR, IAkkaNames.SOCIAL_INSPECTION_PORT, IAkkaNames.SOCIAL_SYSTEM, socialQueue);
-		final SenderActorCreator creator2 = new SenderActorCreator("localhost", IAkkaNames.DETAVERAGE_ACTOR, IAkkaNames.DET_AVERAGE_PORT, IAkkaNames.DETAVERAGE_SYSTEM, detaverageQueue);
+		final SenderActorCreator creator = new SenderActorCreator("127.0.0.1", IAkkaNames.SOCIAL_ACTOR, IAkkaNames.SOCIAL_INSPECTION_PORT, IAkkaNames.SOCIAL_SYSTEM, socialQueue);
+		final SenderActorCreator creator2 = new SenderActorCreator("127.0.0.1", IAkkaNames.DETAVERAGE_ACTOR, IAkkaNames.DET_AVERAGE_PORT, IAkkaNames.DETAVERAGE_SYSTEM, detaverageQueue);
 		
 		system.actorOf(Props.create(creator), "enteractor1");
 		system.actorOf(Props.create(creator2), "enteractor2");

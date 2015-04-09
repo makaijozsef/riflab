@@ -23,7 +23,11 @@ public class ReceiverActor extends UntypedActor {
 		Serializable deserialized = Util.deserialize((byte[])message);
 		
 		if(deserialized instanceof ApplicationData | deserialized instanceof SocialResult){
-			queue.add(deserialized);			
+			queue.add(deserialized);	
+			
+		}
+		else {
+			unhandled(message);
 		}
 	}
 	

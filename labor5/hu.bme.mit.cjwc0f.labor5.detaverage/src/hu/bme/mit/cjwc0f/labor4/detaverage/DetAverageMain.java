@@ -40,7 +40,7 @@ public class DetAverageMain {
 		Queue<ApplicationData> outQueue = new LinkedList<ApplicationData>();
 		
 		final ReceiverActorCreator receiverCreator = new ReceiverActorCreator(inQueue);
-		final SenderActorCreator creator = new SenderActorCreator("localhost", IAkkaNames.ADDCOMMPOINTS_ACTOR, IAkkaNames.ADD_COMM_POINTS_PORT, IAkkaNames.ADDCOMMPOINTS_SYSTEM, outQueue);
+		final SenderActorCreator creator = new SenderActorCreator("127.0.0.1", IAkkaNames.ADDCOMMPOINTS_ACTOR, IAkkaNames.ADD_COMM_POINTS_PORT, IAkkaNames.ADDCOMMPOINTS_SYSTEM, outQueue);
 		
 		system.actorOf(Props.create(creator), "sender");
 		system.actorOf(Props.create(receiverCreator), IAkkaNames.DETAVERAGE_ACTOR);

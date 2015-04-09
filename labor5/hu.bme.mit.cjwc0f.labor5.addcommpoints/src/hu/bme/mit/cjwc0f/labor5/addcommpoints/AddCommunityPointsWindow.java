@@ -7,7 +7,9 @@ import hu.bme.mit.cjwc0f.labor5.workflow.AddCommunityPoints;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.Serializable;
 import java.lang.management.ManagementFactory;
+import java.util.Queue;
 
 import javax.swing.JButton;
 
@@ -17,7 +19,7 @@ public class AddCommunityPointsWindow extends AbstractWindow {
 	private JButton buttonTrue;
 	private JButton buttonFalse;
 
-	public AddCommunityPointsWindow() {
+	public AddCommunityPointsWindow(Queue<Serializable> inQueue, Queue<ApplicationData> outQueueAssign, Queue<ApplicationData> outQueueFinal) {
 		super("Add community points", 700, 100);
 
 		final String jvmName = ManagementFactory.getRuntimeMXBean().getName();
@@ -29,7 +31,17 @@ public class AddCommunityPointsWindow extends AbstractWindow {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				ApplicationData applicationData = (ApplicationData)inQueue.poll();
+				ApplicationData calculatedData = AddCommunityPoints.calculate(applicationData);
 				
+				if (calculatedData.getAverage() >= 3) {
+					outQueueAssign.add(calculatedData);
+				}
+				else {
+					outQueueFinal.add(calculatedData);
+				}
+				
+				textArea.setText(calculatedData.toString());
 			}
 			
 		});
@@ -42,7 +54,9 @@ public class AddCommunityPointsWindow extends AbstractWindow {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-
+				ApplicationData applicationData = (ApplicationData)inQueue.poll();
+				outQueueAssign.add(applicationData);
+				textArea.setText(applicationData.toString());
 			}
 
 		});
@@ -54,6 +68,9 @@ public class AddCommunityPointsWindow extends AbstractWindow {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				ApplicationData applicationData = (ApplicationData)inQueue.poll();
+				outQueueFinal.add(applicationData);
+				textArea.setText(applicationData.toString());
 			}
 
 		});

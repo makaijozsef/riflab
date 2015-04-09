@@ -41,7 +41,7 @@ public class SocialMain {
 		        ConfigFactory.parseString(config));
 		
 		final ReceiverActorCreator receiverCreator = new ReceiverActorCreator(inQueue);
-		final SenderActorCreator creator = new SenderActorCreator("localhost", IAkkaNames.FINAL_SOCIAL_ACTOR, IAkkaNames.FINAL_RESULT_PORT, IAkkaNames.FINAL_RESULT_SYSTEM, outQueue);
+		final SenderActorCreator creator = new SenderActorCreator("127.0.0.1", IAkkaNames.FINAL_SOCIAL_ACTOR, IAkkaNames.FINAL_RESULT_PORT, IAkkaNames.FINAL_RESULT_SYSTEM, outQueue);
 		
 		system.actorOf(Props.create(creator), "sender");
 		system.actorOf(Props.create(receiverCreator), IAkkaNames.SOCIAL_ACTOR);

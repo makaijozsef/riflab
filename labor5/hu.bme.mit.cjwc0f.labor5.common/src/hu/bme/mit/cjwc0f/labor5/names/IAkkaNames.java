@@ -9,6 +9,8 @@ public interface IAkkaNames {
 	public static final String DETAVERAGE_ACTOR = "det_average_actor";
 	public static final String ADDCOMMPOINTS_SYSTEM = "add_comm_points";
 	public static final String ADDCOMMPOINTS_ACTOR = "add_comm_points_actor";
+	public static final String ASSIGNROOM_SYSTEM = "assign_room";
+	public static final String ASSIGNROOM_ACTOR = "assign_room_actor";
 	public static final String FINAL_SOCIAL_ACTOR = "final_social_actor";
 	public static final String FINAL_STUDY_ACTOR = "final_study_actor";
 	public static final String FINAL_RESULT_SYSTEM = "final_result";

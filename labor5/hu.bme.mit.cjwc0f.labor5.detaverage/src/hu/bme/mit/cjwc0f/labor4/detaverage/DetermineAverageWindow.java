@@ -6,14 +6,16 @@ import hu.bme.mit.cjwc0f.labor5.workflow.DetermineAverage;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.Serializable;
 import java.lang.management.ManagementFactory;
+import java.util.Queue;
 
 
 @SuppressWarnings("serial")
 public class DetermineAverageWindow extends AbstractWindow {
 
 
-	public DetermineAverageWindow() {
+	public DetermineAverageWindow(Queue<Serializable> inQueue, Queue<ApplicationData> outQueue) {
 		super("Determine average", 350, 100);
 		
 		final String jvmName = ManagementFactory.getRuntimeMXBean().getName();
@@ -25,7 +27,12 @@ public class DetermineAverageWindow extends AbstractWindow {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				ApplicationData applicationData = (ApplicationData)inQueue.poll();
+				ApplicationData calculatedData = DetermineAverage.calculate(applicationData);
 				
+				outQueue.add(calculatedData);
+				
+				textArea.setText(calculatedData.toString());
 			}
 			
 		});

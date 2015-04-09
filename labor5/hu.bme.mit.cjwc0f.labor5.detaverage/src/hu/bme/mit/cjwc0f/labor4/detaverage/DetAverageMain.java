@@ -1,10 +1,12 @@
 package hu.bme.mit.cjwc0f.labor4.detaverage;
 
+import hu.bme.mit.cjwc0f.labor5.akka.ReceiverActorCreator;
 import hu.bme.mit.cjwc0f.labor5.akka.SenderActor;
 import hu.bme.mit.cjwc0f.labor5.akka.SenderActorCreator;
 import hu.bme.mit.cjwc0f.labor5.data.ApplicationData;
 import hu.bme.mit.cjwc0f.labor5.names.IAkkaNames;
 
+import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -34,14 +36,17 @@ public class DetAverageMain {
 		
 		final ActorSystem system = ActorSystem.create(IAkkaNames.DETAVERAGE_SYSTEM, ConfigFactory.parseString(config));
 		
-		Queue<ApplicationData> addCommPointsQueue = new LinkedList<ApplicationData>();
+		Queue<Serializable> inQueue = new LinkedList<Serializable>();
+		Queue<ApplicationData> outQueue = new LinkedList<ApplicationData>();
 		
-		final SenderActorCreator creator = new SenderActorCreator("localhost", IAkkaNames.ADDCOMMPOINTS_ACTOR, IAkkaNames.ADD_COMM_POINTS_PORT, IAkkaNames.ADDCOMMPOINTS_SYSTEM, addCommPointsQueue);
+		final ReceiverActorCreator receiverCreator = new ReceiverActorCreator(inQueue);
+		final SenderActorCreator creator = new SenderActorCreator("localhost", IAkkaNames.ADDCOMMPOINTS_ACTOR, IAkkaNames.ADD_COMM_POINTS_PORT, IAkkaNames.ADDCOMMPOINTS_SYSTEM, outQueue);
 		
-		system.actorOf(Props.create(creator), IAkkaNames.DETAVERAGE_ACTOR);
+		system.actorOf(Props.create(creator), "sender");
+		system.actorOf(Props.create(receiverCreator), IAkkaNames.DETAVERAGE_ACTOR);
 		
 		
-		DetermineAverageWindow window = new DetermineAverageWindow();
+		DetermineAverageWindow window = new DetermineAverageWindow(inQueue, outQueue);
 		window.pack();
 		window.setVisible(true);
 

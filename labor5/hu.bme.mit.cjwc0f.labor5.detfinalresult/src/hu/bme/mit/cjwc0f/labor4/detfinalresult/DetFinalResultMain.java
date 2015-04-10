@@ -6,6 +6,11 @@ import hu.bme.mit.cjwc0f.labor5.names.IAkkaNames;
 import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import org.kohsuke.args4j.CmdLineException;
+import org.kohsuke.args4j.CmdLineParser;
 
 import akka.actor.ActorSystem;
 import akka.actor.Props;
@@ -17,6 +22,19 @@ public class DetFinalResultMain {
 
 	public static void main(String[] args) {
 		
+		DetFinalParams params = new DetFinalParams();
+		
+		CmdLineParser parser = new CmdLineParser(params);
+		
+		try {
+			parser.parseArgument(args);
+		} catch (CmdLineException e) {
+			Logger.getGlobal().log(Level.SEVERE, "Could not parse arguments: " + e.getMessage());
+			System.exit(1);
+		}
+		
+		String bindAddress = params.getBindAddress();
+		
 		String config = "akka {\r\n" + 
 		 		"\r\n" + 
 		 		"  actor {\r\n" + 
@@ -25,7 +43,7 @@ public class DetFinalResultMain {
 		 		"\r\n" + 
 		 		"  remote {\r\n" + 
 		 		"    netty.tcp {\r\n" + 
-		 		"      hostname = \"127.0.0.1\"\r\n" + 
+		 		"      hostname = \"" + bindAddress +"\"\r\n" + 
 		 		"      port = "+ IAkkaNames.FINAL_RESULT_PORT +" \r\n" + 
 		 		"    }\r\n" + 
 		 		"  }\r\n" + 

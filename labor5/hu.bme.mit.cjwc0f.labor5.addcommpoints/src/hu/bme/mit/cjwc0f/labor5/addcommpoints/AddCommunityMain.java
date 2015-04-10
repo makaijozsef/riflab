@@ -9,6 +9,11 @@ import hu.bme.mit.cjwc0f.labor5.names.IAkkaNames;
 import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import org.kohsuke.args4j.CmdLineException;
+import org.kohsuke.args4j.CmdLineParser;
 
 import akka.actor.ActorSystem;
 import akka.actor.Props;
@@ -20,6 +25,21 @@ public class AddCommunityMain {
 
 	public static void main(String[] args) {
 		
+		AddCommunityParams params = new AddCommunityParams();
+		
+		CmdLineParser parser = new CmdLineParser(params);
+		
+		try {
+			parser.parseArgument(args);
+		} catch (CmdLineException e) {
+			Logger.getGlobal().log(Level.SEVERE, "Could not parse arguments: " + e.getMessage());
+			System.exit(1);
+		}
+		
+		String bindAddress = params.getBindAddress();
+		String assignRoomHost = params.getAssignRoomHost();
+		String finalResultHost = params.getFinalResultHost();
+		
 		String config = "akka {\r\n" + 
 		 		"\r\n" + 
 		 		"  actor {\r\n" + 
@@ -28,7 +48,7 @@ public class AddCommunityMain {
 		 		"\r\n" + 
 		 		"  remote {\r\n" + 
 		 		"    netty.tcp {\r\n" + 
-		 		"      hostname = \"127.0.0.1\"\r\n" + 
+		 		"      hostname = \"" + bindAddress +"\"\r\n" + 
 		 		"      port = "+ IAkkaNames.ADD_COMM_POINTS_PORT +" \r\n" + 
 		 		"    }\r\n" + 
 		 		"  }\r\n" + 
@@ -42,8 +62,8 @@ public class AddCommunityMain {
 		Queue<ApplicationData> outQueueFinal= new LinkedList<ApplicationData>();
 		
 		final ReceiverActorCreator receiverCreator = new ReceiverActorCreator(inQueue);
-		final SenderActorCreator toAssignCreator = new SenderActorCreator("127.0.0.1", IAkkaNames.ASSIGNROOM_ACTOR, IAkkaNames.ASSIGN_ROOM_PORT, IAkkaNames.ASSIGNROOM_SYSTEM, outQueueAssign);
-		final SenderActorCreator toFinalCreator = new SenderActorCreator("127.0.0.1", IAkkaNames.FINAL_STUDY_ACTOR, IAkkaNames.FINAL_RESULT_PORT, IAkkaNames.FINAL_RESULT_SYSTEM, outQueueFinal);
+		final SenderActorCreator toAssignCreator = new SenderActorCreator(assignRoomHost, IAkkaNames.ASSIGNROOM_ACTOR, IAkkaNames.ASSIGN_ROOM_PORT, IAkkaNames.ASSIGNROOM_SYSTEM, outQueueAssign);
+		final SenderActorCreator toFinalCreator = new SenderActorCreator(finalResultHost, IAkkaNames.FINAL_STUDY_ACTOR, IAkkaNames.FINAL_RESULT_PORT, IAkkaNames.FINAL_RESULT_SYSTEM, outQueueFinal);
 		
 		system.actorOf(Props.create(toAssignCreator), "sender");
 		system.actorOf(Props.create(toFinalCreator), "sender2");

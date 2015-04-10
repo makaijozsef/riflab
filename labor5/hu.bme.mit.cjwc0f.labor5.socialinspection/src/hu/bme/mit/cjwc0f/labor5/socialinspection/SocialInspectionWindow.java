@@ -13,27 +13,29 @@ import java.util.Queue;
 
 @SuppressWarnings("serial")
 public class SocialInspectionWindow extends AbstractWindow {
-	
-	
+
 	public SocialInspectionWindow(Queue<Serializable> inQueue, Queue<SocialResult> outQueue) {
 		super("Social inspection", 700, 500);
-		
+
 		final String jvmName = ManagementFactory.getRuntimeMXBean().getName();
 		this.setTitle("Social inspection - " + jvmName);
-		
-		
+
 		button.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				ApplicationData applicationData = (ApplicationData)inQueue.poll();
+				ApplicationData applicationData = (ApplicationData) inQueue.poll();
 				SocialResult socialResult = SocialInspection.createResult(applicationData);
-				
+
 				outQueue.add(socialResult);
-				
+
 				textArea.setText(socialResult.toString());
 			}
 		});
+
+		Thread t1 = new Thread(new QueueObserver(button, inQueue));
+		t1.setDaemon(true);
+		t1.start();
 
 	}
 

@@ -10,33 +10,32 @@ import java.io.Serializable;
 import java.lang.management.ManagementFactory;
 import java.util.Queue;
 
-
 @SuppressWarnings("serial")
 public class DetermineAverageWindow extends AbstractWindow {
 
-
 	public DetermineAverageWindow(Queue<Serializable> inQueue, Queue<ApplicationData> outQueue) {
 		super("Determine average", 350, 100);
-		
+
 		final String jvmName = ManagementFactory.getRuntimeMXBean().getName();
 		this.setTitle("Determine average - " + jvmName);
 
-		
 		button.addActionListener(new ActionListener() {
-			
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				ApplicationData applicationData = (ApplicationData)inQueue.poll();
+				ApplicationData applicationData = (ApplicationData) inQueue.poll();
 				ApplicationData calculatedData = DetermineAverage.calculate(applicationData);
-				
+
 				outQueue.add(calculatedData);
-				
+
 				textArea.setText(calculatedData.toString());
 			}
-			
+
 		});
-		
+
+		Thread t1 = new Thread(new QueueObserver(button, inQueue));
+		t1.setDaemon(true);
+		t1.start();
 	}
 
 }

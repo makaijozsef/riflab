@@ -13,7 +13,7 @@ import java.util.Queue;
 @SuppressWarnings("serial")
 public class AssignRoomNumberWindow extends AbstractWindow {
 
-	public AssignRoomNumberWindow(Queue<Serializable> inQueue, Queue<ApplicationData> outQueue) {
+	public AssignRoomNumberWindow(final Queue<Serializable> inQueue, final Queue<ApplicationData> outQueue) {
 		super("Assign room number", 1050, 0);
 
 		final String jvmName = ManagementFactory.getRuntimeMXBean().getName();

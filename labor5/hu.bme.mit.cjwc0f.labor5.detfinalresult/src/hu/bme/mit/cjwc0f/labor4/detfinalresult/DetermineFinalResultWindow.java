@@ -24,7 +24,7 @@ public class DetermineFinalResultWindow extends AbstractWindow {
 
 	private JButton socialButton;
 
-	public DetermineFinalResultWindow(Queue<Serializable> inQueueStudy, Queue<Serializable> inQueueSocial) {
+	public DetermineFinalResultWindow(final Queue<Serializable> inQueueStudy, final Queue<Serializable> inQueueSocial) {
 
 		super("Determine final result", 1400, 300);
 

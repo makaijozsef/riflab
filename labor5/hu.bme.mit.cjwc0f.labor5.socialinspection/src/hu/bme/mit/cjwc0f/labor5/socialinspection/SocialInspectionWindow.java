@@ -14,7 +14,7 @@ import java.util.Queue;
 @SuppressWarnings("serial")
 public class SocialInspectionWindow extends AbstractWindow {
 
-	public SocialInspectionWindow(Queue<Serializable> inQueue, Queue<SocialResult> outQueue) {
+	public SocialInspectionWindow(final Queue<Serializable> inQueue, final Queue<SocialResult> outQueue) {
 		super("Social inspection", 700, 500);
 
 		final String jvmName = ManagementFactory.getRuntimeMXBean().getName();

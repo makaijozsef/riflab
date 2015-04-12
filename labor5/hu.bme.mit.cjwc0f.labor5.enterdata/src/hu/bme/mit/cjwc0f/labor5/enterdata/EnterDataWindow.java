@@ -15,7 +15,7 @@ import javax.swing.JButton;
 @SuppressWarnings("serial")
 public class EnterDataWindow extends AbstractWindow {
 
-	public EnterDataWindow(Queue<ApplicationData> socialQueue, Queue<ApplicationData> detaverageQueue) {
+	public EnterDataWindow(final Queue<ApplicationData> socialQueue, final Queue<ApplicationData> detaverageQueue) {
 		super("Enter applicant data", 0, 300);
 
 		final String jvmName = ManagementFactory.getRuntimeMXBean().getName();

@@ -20,7 +20,7 @@ public class AddCommunityPointsWindow extends AbstractWindow {
 	private JButton buttonFalse;
 
 	public AddCommunityPointsWindow(final Queue<Serializable> inQueue, final Queue<ApplicationData> outQueueAssign,
-			Queue<ApplicationData> outQueueFinal) {
+			final Queue<ApplicationData> outQueueFinal) {
 		super("Add community points", 700, 100);
 
 		final String jvmName = ManagementFactory.getRuntimeMXBean().getName();

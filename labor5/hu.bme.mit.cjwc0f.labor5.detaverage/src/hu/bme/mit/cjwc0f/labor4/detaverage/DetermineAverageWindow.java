@@ -13,7 +13,7 @@ import java.util.Queue;
 @SuppressWarnings("serial")
 public class DetermineAverageWindow extends AbstractWindow {
 
-	public DetermineAverageWindow(Queue<Serializable> inQueue, Queue<ApplicationData> outQueue) {
+	public DetermineAverageWindow(final Queue<Serializable> inQueue, final Queue<ApplicationData> outQueue) {
 		super("Determine average", 350, 100);
 
 		final String jvmName = ManagementFactory.getRuntimeMXBean().getName();

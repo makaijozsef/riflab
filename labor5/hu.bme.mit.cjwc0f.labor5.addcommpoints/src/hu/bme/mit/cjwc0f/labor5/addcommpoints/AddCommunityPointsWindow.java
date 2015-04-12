@@ -19,7 +19,7 @@ public class AddCommunityPointsWindow extends AbstractWindow {
 	private JButton buttonTrue;
 	private JButton buttonFalse;
 
-	public AddCommunityPointsWindow(Queue<Serializable> inQueue, Queue<ApplicationData> outQueueAssign,
+	public AddCommunityPointsWindow(final Queue<Serializable> inQueue, final Queue<ApplicationData> outQueueAssign,
 			Queue<ApplicationData> outQueueFinal) {
 		super("Add community points", 700, 100);
 

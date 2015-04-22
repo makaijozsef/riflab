@@ -9,6 +9,7 @@ import hu.bme.mit.cjwc0f.labor5.akka.SenderActorCreator;
 import hu.bme.mit.cjwc0f.labor5.assignroomnumber.AssignRoomNumberWindow;
 import hu.bme.mit.cjwc0f.labor5.data.ApplicationData;
 import hu.bme.mit.cjwc0f.labor5.data.SocialResult;
+import hu.bme.mit.cjwc0f.labor5.drools.EventQueue;
 import hu.bme.mit.cjwc0f.labor5.enterdata.EnterDataWindow;
 import hu.bme.mit.cjwc0f.labor5.names.IAkkaNames;
 import hu.bme.mit.cjwc0f.labor5.socialinspection.SocialInspectionWindow;
@@ -16,6 +17,7 @@ import hu.bme.mit.cjwc0f.labor5.socialinspection.SocialInspectionWindow;
 import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
@@ -229,9 +231,9 @@ public class ProcessMain {
 		detfinalWindow.pack();
 		detfinalWindow.setVisible(true);
 		
-		
-		/********************************/
-		// Fill working memory
+		// TODO
+		DroolsListener droolsListener = new DroolsListener();
+		EventQueue.setListener(droolsListener);
 		
 	}
 	

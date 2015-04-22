@@ -1,0 +1,45 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>hu.bme.mit.cjwc0f.labor6</groupId>
+	<artifactId>main</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+
+	<dependencies>
+		<dependency>
+			<groupId>hu.bme.mit.cjwc0f.labor6</groupId>
+			<artifactId>addcommpoints</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>hu.bme.mit.cjwc0f.labor6</groupId>
+			<artifactId>assignroomnumber</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>hu.bme.mit.cjwc0f.labor6</groupId>
+			<artifactId>detaverage</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>hu.bme.mit.cjwc0f.labor6</groupId>
+			<artifactId>detfinalresult</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>hu.bme.mit.cjwc0f.labor6</groupId>
+			<artifactId>enterdata</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>hu.bme.mit.cjwc0f.labor6</groupId>
+			<artifactId>socialinspection</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+	</dependencies>
+</project>

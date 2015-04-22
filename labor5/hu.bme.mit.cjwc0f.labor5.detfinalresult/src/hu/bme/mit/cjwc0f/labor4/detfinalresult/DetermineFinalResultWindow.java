@@ -1,7 +1,9 @@
 package hu.bme.mit.cjwc0f.labor4.detfinalresult;
 
+import hu.bme.mit.cjwc0f.events.Joined;
 import hu.bme.mit.cjwc0f.labor5.data.ApplicationData;
 import hu.bme.mit.cjwc0f.labor5.data.SocialResult;
+import hu.bme.mit.cjwc0f.labor5.drools.EventQueue;
 import hu.bme.mit.cjwc0f.labor5.gui.AbstractWindow;
 import hu.bme.mit.cjwc0f.labor5.workflow.DetermineFinalResult;
 
@@ -47,7 +49,7 @@ public class DetermineFinalResultWindow extends AbstractWindow {
 				if (matchingSR != null) {
 					socialResults.remove(matchingSR);
 					ApplicationData finalResult = DetermineFinalResult.decide(applicationData, matchingSR);
-
+					EventQueue.add(new Joined(finalResult.getTimestamp()));
 					textArea.setText(finalResult.toString());
 				} else {
 					applicationDatas.add(applicationData);
@@ -77,7 +79,7 @@ public class DetermineFinalResultWindow extends AbstractWindow {
 				if (matchingAD != null) {
 					applicationDatas.remove(matchingAD);
 					ApplicationData finalResult = DetermineFinalResult.decide(matchingAD, socialResult);
-
+					EventQueue.add(new Joined(finalResult.getTimestamp()));
 					textArea.setText(finalResult.toString());
 				} else {
 					socialResults.add(socialResult);

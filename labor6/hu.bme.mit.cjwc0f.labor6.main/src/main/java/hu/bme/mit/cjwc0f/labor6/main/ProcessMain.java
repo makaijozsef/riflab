@@ -229,6 +229,10 @@ public class ProcessMain {
 		detfinalWindow.pack();
 		detfinalWindow.setVisible(true);
 		
+		
+		/********************************/
+		// Fill working memory
+		
 	}
 	
 }

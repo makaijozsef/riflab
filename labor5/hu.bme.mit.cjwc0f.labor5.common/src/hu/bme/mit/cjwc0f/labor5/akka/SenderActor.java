@@ -1,43 +1,23 @@
 package hu.bme.mit.cjwc0f.labor5.akka;
 
-import static java.util.concurrent.TimeUnit.SECONDS;
 import hu.bme.mit.cjwc0f.labor5.workflow.Util;
 
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.Queue;
 
-import scala.concurrent.duration.Duration;
 import akka.actor.ActorIdentity;
 import akka.actor.ActorRef;
-import akka.actor.Identify;
-import akka.actor.ReceiveTimeout;
 import akka.actor.UntypedActor;
 
 public class SenderActor extends UntypedActor {
 	private ActorRef remotePair = null;
-	private String path;
 
 	private Queue<? extends Serializable> queue;
 
-	public SenderActor(String remoteSystem, String actorName,
-			String remoteHost, int port, Queue<? extends Serializable> queue) {
-		path = "akka.tcp://" + remoteSystem + "@" + remoteHost + ":" + port
-				+ "/user/" + actorName;
-
+	public SenderActor(ActorRef remotePair, Queue<? extends Serializable> queue) {
+		this.remotePair = remotePair;
 		this.queue = queue;
-
-		sendIdentifyRequest();
-	}
-
-	private void sendIdentifyRequest() {
-		getContext().actorSelection(path).tell(new Identify(path), getSelf());
-		getContext()
-				.system()
-				.scheduler()
-				.scheduleOnce(Duration.create(3, SECONDS), getSelf(),
-						ReceiveTimeout.getInstance(),
-						getContext().dispatcher(), getSelf());
 	}
 
 	@Override
@@ -46,13 +26,10 @@ public class SenderActor extends UntypedActor {
 			if (message instanceof ActorIdentity) {
 				remotePair = ((ActorIdentity) message).getRef();
 				if (remotePair == null) {
-					System.out.println("Remote actor not available: " + path);
+					System.out.println("Remote actor not available");
 				} else {
 					getContext().watch(remotePair);
 				}
-
-			} else if (message instanceof ReceiveTimeout) {
-				sendIdentifyRequest();
 
 			} else {
 				System.out.println("Not ready yet");

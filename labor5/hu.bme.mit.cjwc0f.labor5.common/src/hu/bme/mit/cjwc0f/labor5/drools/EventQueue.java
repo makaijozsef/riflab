@@ -6,7 +6,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class EventQueue {
 
-	private static ConcurrentLinkedQueue<HostelApplicationAbstractEvent> events;
+	private static ConcurrentLinkedQueue<HostelApplicationAbstractEvent> events = new ConcurrentLinkedQueue<HostelApplicationAbstractEvent>();
 	
 	private static IDroolsListener listener;
 	

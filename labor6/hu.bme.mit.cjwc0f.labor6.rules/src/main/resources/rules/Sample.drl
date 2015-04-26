@@ -45,3 +45,18 @@ rule "SocialWaitsForStudy"
         retract($socialWFJ);
         retract($study);
 end
+
+
+rule "BranchTooManyTimesChosen"
+salience 5
+	when 
+		$totalDetFinal : Number( )
+			from accumulate( $detFinalResult : DetFinalResultChosen( ) over window:time(25s) , count( $detFinalResult  ) )
+		$totalAss : Number( )
+			from accumulate( $ass : AssignRoomChosen( ) over window:time(25s) , count( $ass  ) )
+	then
+		if(Math.abs($totalAss.intValue() - $totalDetFinal.intValue()) > 5){
+			System.out.println("One of the branches too many times were chosen in the last 25 seconds");
+		}
+			
+end

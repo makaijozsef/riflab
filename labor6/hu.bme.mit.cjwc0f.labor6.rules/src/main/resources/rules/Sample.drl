@@ -4,6 +4,8 @@ import com.sample.DroolsTest.Message;
 import hu.bme.mit.cjwc0f.events.StudyWaitsForJoin;
 import hu.bme.mit.cjwc0f.events.SocialWaitsForJoin;
 import hu.bme.mit.cjwc0f.events.Joined;
+import hu.bme.mit.cjwc0f.events.AssignRoomChosen;
+import hu.bme.mit.cjwc0f.events.DetFinalResultChosen;
  
 declare Joined
 	@role(event)
@@ -14,6 +16,14 @@ declare StudyWaitsForJoin
 end 
 declare SocialWaitsForJoin
 	@role(event)
+end 
+declare AssignRoomChosen
+	@role(event)
+	@expires(25s)
+end 
+declare DetFinalResultChosen
+	@role(event)
+	@expires(25s)
 end 
 
 rule "StudyWaitsForSocial"

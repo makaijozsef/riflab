@@ -1,6 +1,7 @@
 package hu.bme.mit.cjwc0f.labor5.addcommpoints;
 
-import hu.bme.mit.cjwc0f.events.Joined;
+import hu.bme.mit.cjwc0f.events.AssignRoomChosen;
+import hu.bme.mit.cjwc0f.events.DetFinalResultChosen;
 import hu.bme.mit.cjwc0f.events.StudyWaitsForJoin;
 import hu.bme.mit.cjwc0f.labor5.data.ApplicationData;
 import hu.bme.mit.cjwc0f.labor5.drools.EventQueue;
@@ -41,6 +42,7 @@ public class AddCommunityPointsWindow extends AbstractWindow {
 				} else {
 					outQueueFinal.add(calculatedData);
 					EventQueue.add(new StudyWaitsForJoin(calculatedData.getTimestamp()));
+					EventQueue.add(new DetFinalResultChosen());
 				}
 
 				textArea.setText(calculatedData.toString());
@@ -56,6 +58,7 @@ public class AddCommunityPointsWindow extends AbstractWindow {
 			public void actionPerformed(ActionEvent e) {
 				ApplicationData applicationData = (ApplicationData) inQueue.poll();
 				outQueueAssign.add(applicationData);
+				EventQueue.add(new AssignRoomChosen());
 				textArea.setText(applicationData.toString());
 			}
 
@@ -70,7 +73,8 @@ public class AddCommunityPointsWindow extends AbstractWindow {
 			public void actionPerformed(ActionEvent e) {
 				ApplicationData applicationData = (ApplicationData) inQueue.poll();
 				outQueueFinal.add(applicationData);
-				EventQueue.add(new Joined(applicationData.getTimestamp()));
+				EventQueue.add(new StudyWaitsForJoin(applicationData.getTimestamp()));
+				EventQueue.add(new DetFinalResultChosen());
 				textArea.setText(applicationData.toString());
 			}
 

@@ -39,6 +39,7 @@ public class AddCommunityPointsWindow extends AbstractWindow {
 
 				if (calculatedData.getAverage() >= 3) {
 					outQueueAssign.add(calculatedData);
+					EventQueue.add(new AssignRoomChosen());
 				} else {
 					outQueueFinal.add(calculatedData);
 					EventQueue.add(new StudyWaitsForJoin(calculatedData.getTimestamp()));

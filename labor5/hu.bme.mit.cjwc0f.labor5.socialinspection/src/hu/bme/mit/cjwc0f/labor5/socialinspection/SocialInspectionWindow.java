@@ -1,6 +1,6 @@
 package hu.bme.mit.cjwc0f.labor5.socialinspection;
 
-import hu.bme.mit.cjwc0f.events.WaitsForJoin;
+import hu.bme.mit.cjwc0f.events.SocialWaitsForJoin;
 import hu.bme.mit.cjwc0f.labor5.data.ApplicationData;
 import hu.bme.mit.cjwc0f.labor5.data.SocialResult;
 import hu.bme.mit.cjwc0f.labor5.drools.EventQueue;
@@ -31,7 +31,7 @@ public class SocialInspectionWindow extends AbstractWindow {
 
 				outQueue.add(socialResult);
 
-				EventQueue.add(new WaitsForJoin(socialResult.getApplicantData().getTimestamp()));
+				EventQueue.add(new SocialWaitsForJoin(socialResult.getApplicantData().getTimestamp()));
 				
 				textArea.setText(socialResult.toString());
 			}

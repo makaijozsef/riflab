@@ -1,20 +1,24 @@
 package com.sample
  
 import com.sample.DroolsTest.Message;
-import hu.bme.mit.cjwc0f.events.WaitsForJoin;
+import hu.bme.mit.cjwc0f.events.StudyWaitsForJoin;
+import hu.bme.mit.cjwc0f.events.SocialWaitsForJoin;
 import hu.bme.mit.cjwc0f.events.Joined;
  
 declare Joined
 	@role(event)
 	@expires(25s)
 end  
-declare WaitsForJoin
+declare StudyWaitsForJoin
+	@role(event)
+end 
+declare SocialWaitsForJoin
 	@role(event)
 end 
 
 rule "Hello World"
     when
-        m : WaitsForJoin()
+        m : StudyWaitsForJoin()
     then
         System.out.println( "Goodbye cruel world" );
 end

@@ -1,6 +1,7 @@
 package hu.bme.mit.cjwc0f.labor5.addcommpoints;
 
 import hu.bme.mit.cjwc0f.events.Joined;
+import hu.bme.mit.cjwc0f.events.StudyWaitsForJoin;
 import hu.bme.mit.cjwc0f.labor5.data.ApplicationData;
 import hu.bme.mit.cjwc0f.labor5.drools.EventQueue;
 import hu.bme.mit.cjwc0f.labor5.gui.AbstractWindow;
@@ -39,7 +40,7 @@ public class AddCommunityPointsWindow extends AbstractWindow {
 					outQueueAssign.add(calculatedData);
 				} else {
 					outQueueFinal.add(calculatedData);
-					EventQueue.add(new Joined(calculatedData.getTimestamp()));
+					EventQueue.add(new StudyWaitsForJoin(calculatedData.getTimestamp()));
 				}
 
 				textArea.setText(calculatedData.toString());

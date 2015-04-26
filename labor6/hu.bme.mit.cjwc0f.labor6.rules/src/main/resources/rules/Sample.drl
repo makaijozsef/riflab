@@ -1,9 +1,12 @@
 package com.sample
  
 import com.sample.DroolsTest.Message;
+import hu.bme.mit.cjwc0f.events.WaitsForJoin;
+import hu.bme.mit.cjwc0f.events.Joined;
  
 declare Joined
 	@role(event)
+	@expires(25s)
 end  
 declare WaitsForJoin
 	@role(event)
@@ -11,12 +14,9 @@ end
 
 rule "Hello World"
     when
-        m : Message( status == Message.HELLO, myMessage : message )
+        m : WaitsForJoin()
     then
-        System.out.println( myMessage );
-        m.setMessage( "Goodbye cruel world" );
-        m.setStatus( Message.GOODBYE );
-        update( m );
+        System.out.println( "Goodbye cruel world" );
 end
 
 rule "GoodBye"

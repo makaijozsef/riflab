@@ -21,9 +21,7 @@ public class DroolsListener implements IDroolsListener {
 	
 	@Override
 	public void process() {
-		// TODO add this to the working memory
 		HostelApplicationAbstractEvent event = EventQueue.poll();
-		System.out.println(event.toString());
 		kSession.insert(event);
 		kSession.fireAllRules();
 	}

@@ -16,16 +16,22 @@ declare SocialWaitsForJoin
 	@role(event)
 end 
 
-rule "Hello World"
+rule "StudyWaitsForSocial"
     when
-        m : StudyWaitsForJoin()
+        $studyWFJ : StudyWaitsForJoin($studyTS : timestamp)
+        $social : SocialWaitsForJoin(timestamp == $studyTS, this after[10s] $studyWFJ)
     then
-        System.out.println( "Goodbye cruel world" );
+        System.out.println( "The social branch of the process instance with id( " + $studyTS + " ) was not complete within 10 seconds from the completion of the study branch." );
+        retract($studyWFJ);
+        retract($social);
 end
 
-rule "GoodBye"
+rule "SocialWaitsForStudy"
     when
-        Message( status == Message.GOODBYE, myMessage : message )
+        $socialWFJ : SocialWaitsForJoin($socialTS : timestamp)
+        $study : StudyWaitsForJoin(timestamp == $socialTS, this after[10s] $socialWFJ)
     then
-        System.out.println( myMessage );
+        System.out.println( "The study branch of the process instance with id( " + $socialTS + " ) was not complete within 10 seconds from the completion of the social branch." );
+        retract($socialWFJ);
+        retract($study);
 end

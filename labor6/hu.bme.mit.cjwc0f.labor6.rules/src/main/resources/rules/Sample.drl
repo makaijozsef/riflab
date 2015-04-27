@@ -6,6 +6,7 @@ import hu.bme.mit.cjwc0f.events.SocialWaitsForJoin;
 import hu.bme.mit.cjwc0f.events.Joined;
 import hu.bme.mit.cjwc0f.events.AssignRoomChosen;
 import hu.bme.mit.cjwc0f.events.DetFinalResultChosen;
+import hu.bme.mit.cjwc0f.events.WaitingForTask;
  
 declare Joined
 	@role(event)
@@ -24,6 +25,10 @@ end
 declare DetFinalResultChosen
 	@role(event)
 	@expires(25s)
+end 
+declare WaitingForTask
+	@role(event)
+	@expires(1s)
 end 
 
 rule "StudyWaitsForSocial"
@@ -48,7 +53,6 @@ end
 
 
 rule "BranchTooManyTimesChosen"
-salience 5
 	when 
 		$totalDetFinal : Number( )
 			from accumulate( $detFinalResult : DetFinalResultChosen( ) over window:time(25s) , count( $detFinalResult  ) )
@@ -59,4 +63,12 @@ salience 5
 			System.out.println("One of the branches too many times were chosen in the last 25 seconds");
 		}
 			
+end
+
+rule "TooManyInstancesWaitingForTask"
+	when 
+		$wft : WaitingForTask( instancesWaiting >= 5 )
+	then
+		System.out.println( "There are " + $wft.getInstancesWaiting() + " instances waiting for task: " + $wft.getTaskName() );
+		retract($wft);
 end

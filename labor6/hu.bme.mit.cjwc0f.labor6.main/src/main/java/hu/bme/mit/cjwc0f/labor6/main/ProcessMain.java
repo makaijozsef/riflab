@@ -91,6 +91,13 @@ public class ProcessMain {
 		final SenderActorCreator enterDataToSocialCreator = new SenderActorCreator(socialReceiverActor, enterToSocialQueue);
 		system.actorOf(Props.create(enterDataToSocialCreator), "enterDataToSocialCreator");
 		
+		
+		
+		DroolsListener droolsListener = new DroolsListener();
+		EventQueue.setListener(droolsListener);
+		
+		
+		
 		EnterDataWindow enterDataWindow = new EnterDataWindow(enterToSocialQueue,enterToDetaverageQueue);
 		enterDataWindow.pack();
 		enterDataWindow.setVisible(true);
@@ -231,9 +238,6 @@ public class ProcessMain {
 		detfinalWindow.pack();
 		detfinalWindow.setVisible(true);
 		
-		// TODO
-		DroolsListener droolsListener = new DroolsListener();
-		EventQueue.setListener(droolsListener);
 		
 	}
 	

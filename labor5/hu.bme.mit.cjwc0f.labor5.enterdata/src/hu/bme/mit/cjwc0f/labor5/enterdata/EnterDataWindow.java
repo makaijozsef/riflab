@@ -1,6 +1,8 @@
 package hu.bme.mit.cjwc0f.labor5.enterdata;
 
+import hu.bme.mit.cjwc0f.events.ArrivedToTask;
 import hu.bme.mit.cjwc0f.labor5.data.ApplicationData;
+import hu.bme.mit.cjwc0f.labor5.drools.EventQueue;
 import hu.bme.mit.cjwc0f.labor5.gui.AbstractWindow;
 import hu.bme.mit.cjwc0f.labor5.workflow.EnterApplicantData;
 
@@ -30,10 +32,11 @@ public class EnterDataWindow extends AbstractWindow {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				ApplicationData applicationData = EnterApplicantData.generate();
-				
+
 				socialQueue.add(applicationData);
+				EventQueue.add(new ArrivedToTask(applicationData.getTimestamp(), null));
 				detaverageQueue.add(applicationData);
-				
+
 				textArea.setText(applicationData.toString());
 
 			}

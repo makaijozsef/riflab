@@ -1,7 +1,5 @@
 package hu.bme.mit.cjwc0f.labor5.gui;
 
-import hu.bme.mit.cjwc0f.events.WaitingForTask;
-import hu.bme.mit.cjwc0f.labor5.drools.EventQueue;
 import hu.bme.mit.cjwc0f.labor5.workflow.Util;
 
 import java.awt.BorderLayout;
@@ -22,15 +20,13 @@ public abstract class AbstractWindow extends JFrame {
 
 	protected JTextArea textArea;
 	protected JButton button;
-	
+
 	protected String taskName;
 
 	protected class QueueObserver implements Runnable {
 
 		private JButton internalButton;
 		private Queue<?> observedQueue;
-		
-		protected int lastQueueSize = 0;
 
 		public QueueObserver(JButton button, Queue<?> observedQueue) {
 			internalButton = button;
@@ -48,10 +44,6 @@ public abstract class AbstractWindow extends JFrame {
 						}
 					});
 					Thread.sleep(250);
-					if(lastQueueSize != observedQueue.size()){
-						lastQueueSize = observedQueue.size();
-						EventQueue.add(new WaitingForTask(observedQueue.size(), taskName));
-					}
 				} catch (InterruptedException e) {
 					Logger.getAnonymousLogger().log(Level.SEVERE, "Sleep interrupted");
 				} catch (InvocationTargetException e) {

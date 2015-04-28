@@ -6,7 +6,8 @@ import hu.bme.mit.cjwc0f.events.SocialWaitsForJoin;
 import hu.bme.mit.cjwc0f.events.Joined;
 import hu.bme.mit.cjwc0f.events.AssignRoomChosen;
 import hu.bme.mit.cjwc0f.events.DetFinalResultChosen;
-import hu.bme.mit.cjwc0f.events.WaitingForTask;
+import hu.bme.mit.cjwc0f.events.LeftFromTask;
+import hu.bme.mit.cjwc0f.events.ArrivedToTask;
  
 declare Joined
 	@role(event)
@@ -26,9 +27,11 @@ declare DetFinalResultChosen
 	@role(event)
 	@expires(25s)
 end 
-declare WaitingForTask
+declare LeftFromTask
 	@role(event)
-	@expires(1s)
+end 
+declare ArrivedToTask
+	@role(event)
 end 
 
 rule "StudyWaitsForSocial"
@@ -65,10 +68,15 @@ rule "BranchTooManyTimesChosen"
 			
 end
 
-rule "TooManyInstancesWaitingForTask"
+rule "TooManyWaiting"
 	when 
-		$wft : WaitingForTask( instancesWaiting >= 5 )
+		$totalArrived : Number( )
+			from accumulate( $arrival : ArrivedToTask( ) , count( $arrival ) )
+		$totalLeft : Number( )
+			from accumulate( $left : LeftFromTask( ) , count( $left ) )
 	then
-		System.out.println( "There are " + $wft.getInstancesWaiting() + " instances waiting for task: " + $wft.getTaskName() );
-		retract($wft);
+		if(Math.abs($totalArrived.intValue() - $totalLeft.intValue()) > 3){
+			System.out.println( Math.abs($totalArrived.intValue() - $totalLeft.intValue()) + " instances are waiting for task Determine Social Result");
+		}
+			
 end

@@ -1,0 +1,82 @@
+package com.sample
+ 
+import com.sample.DroolsTest.Message;
+import hu.bme.mit.cjwc0f.events.StudyWaitsForJoin;
+import hu.bme.mit.cjwc0f.events.SocialWaitsForJoin;
+import hu.bme.mit.cjwc0f.events.Joined;
+import hu.bme.mit.cjwc0f.events.AssignRoomChosen;
+import hu.bme.mit.cjwc0f.events.DetFinalResultChosen;
+import hu.bme.mit.cjwc0f.events.LeftFromTask;
+import hu.bme.mit.cjwc0f.events.ArrivedToTask;
+ 
+declare Joined
+	@role(event)
+	@expires(25s)
+end  
+declare StudyWaitsForJoin
+	@role(event)
+end 
+declare SocialWaitsForJoin
+	@role(event)
+end 
+declare AssignRoomChosen
+	@role(event)
+	@expires(25s)
+end 
+declare DetFinalResultChosen
+	@role(event)
+	@expires(25s)
+end 
+declare LeftFromTask
+	@role(event)
+end 
+declare ArrivedToTask
+	@role(event)
+end 
+
+rule "StudyWaitsForSocial"
+    when
+        $studyWFJ : StudyWaitsForJoin($studyTS : timestamp)
+        $social : SocialWaitsForJoin(timestamp == $studyTS, this after[10s] $studyWFJ)
+    then
+        System.out.println( "The social branch of the process instance with id( " + $studyTS + " ) was not complete within 10 seconds from the completion of the study branch." );
+        retract($studyWFJ);
+        retract($social);
+end
+
+rule "SocialWaitsForStudy"
+    when
+        $socialWFJ : SocialWaitsForJoin($socialTS : timestamp)
+        $study : StudyWaitsForJoin(timestamp == $socialTS, this after[10s] $socialWFJ)
+    then
+        System.out.println( "The study branch of the process instance with id( " + $socialTS + " ) was not complete within 10 seconds from the completion of the social branch." );
+        retract($socialWFJ);
+        retract($study);
+end
+
+
+rule "BranchTooManyTimesChosen"
+	when 
+		$totalDetFinal : Number( )
+			from accumulate( $detFinalResult : DetFinalResultChosen( ) over window:time(25s) , count( $detFinalResult  ) )
+		$totalAss : Number( )
+			from accumulate( $ass : AssignRoomChosen( ) over window:time(25s) , count( $ass  ) )
+	then
+		if(Math.abs($totalAss.intValue() - $totalDetFinal.intValue()) > 5){
+			System.out.println("One of the branches too many times were chosen in the last 25 seconds");
+		}
+			
+end
+
+rule "TooManyWaiting"
+	when 
+		$totalArrived : Number( )
+			from accumulate( $arrival : ArrivedToTask( ) , count( $arrival ) )
+		$totalLeft : Number( )
+			from accumulate( $left : LeftFromTask( ) , count( $left ) )
+	then
+		if(Math.abs($totalArrived.intValue() - $totalLeft.intValue()) > 3){
+			System.out.println( Math.abs($totalArrived.intValue() - $totalLeft.intValue()) + " instances are waiting for task Determine Social Result");
+		}
+			
+end

@@ -8,8 +8,12 @@ import java.util.concurrent.BlockingQueue;
 
 public class DetermineAverageWorker extends AbstractWorker {
 
-	public DetermineAverageWorker(BlockingQueue<ApplicationData> inputQueue, BlockingQueue<ApplicationData> outputQueue) {
+	private AddCommunityPointsWorker addCommunityPointsWorker;
+
+	public DetermineAverageWorker(BlockingQueue<ApplicationData> inputQueue,
+			BlockingQueue<ApplicationData> outputQueue, AddCommunityPointsWorker addCommunityPointsWorker) {
 		super(inputQueue, outputQueue);
+		this.addCommunityPointsWorker = addCommunityPointsWorker;
 	}
 
 	@Override
@@ -19,11 +23,21 @@ public class DetermineAverageWorker extends AbstractWorker {
 			Thread.sleep(Util.SLEEP_TIME);
 			if (clicked.get()) {
 				clicked.set(false);
-				ApplicationData applicantData = DetermineAverage.calculate(inputQueue.take());
-				publish(applicantData);
-				outputQueue.put(applicantData);
+				ApplicationData inputData = null;
+				do {
+					if (inputQueue.isEmpty()) {
+						break;
+					}
+					inputData = inputQueue.take();
+					ApplicationData applicantData = DetermineAverage.calculate(inputData);
+					applicantData.setAutomated(inputData.isAutomated());
+					publish(applicantData);
+					outputQueue.put(applicantData);
+				} while (inputData.isAutomated());
+				if (inputData.isAutomated()) {
+					addCommunityPointsWorker.clicked();
+				}
 			}
 		}
 	}
-
 }

@@ -9,8 +9,12 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class AssignRoomNumberWorker extends AbstractWorker {
 
-	public AssignRoomNumberWorker(BlockingQueue<ApplicationData> inputQueue, BlockingQueue<ApplicationData> outputQueue) {
+	private DetermineFinalResultWorker finalResultWorker;
+
+	public AssignRoomNumberWorker(BlockingQueue<ApplicationData> inputQueue,
+			BlockingQueue<ApplicationData> outputQueue, DetermineFinalResultWorker finalResultWorker) {
 		super(inputQueue, outputQueue);
+		this.finalResultWorker = finalResultWorker;
 	}
 
 	@Override
@@ -25,9 +29,17 @@ public class AssignRoomNumberWorker extends AbstractWorker {
 	}
 
 	private ApplicationData createAndPublishData(AtomicBoolean clicked) throws InterruptedException {
-		clicked.set(false);
-		ApplicationData applicantData = AssignRoomNumber.assignRoom(inputQueue.take());
+		ApplicationData inputData = inputQueue.take();
+		clicked.set(inputData.isAutomated());
+		ApplicationData applicantData = AssignRoomNumber.assignRoom(inputData);
+		applicantData.setAutomated(inputData.isAutomated());
 		publish(applicantData);
+		if (inputQueue.isEmpty()) {
+			clicked.set(false);
+			if (applicantData.isAutomated()) {
+				finalResultWorker.clicked();
+			}
+		}
 		return applicantData;
 	}
 

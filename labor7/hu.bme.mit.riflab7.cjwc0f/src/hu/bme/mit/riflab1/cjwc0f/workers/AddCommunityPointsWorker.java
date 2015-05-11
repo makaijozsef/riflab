@@ -14,13 +14,18 @@ public class AddCommunityPointsWorker extends AbstractWorker {
 
 	private BlockingQueue<ApplicationData> outputQueueTrue;
 	private BlockingQueue<ApplicationData> outputQueueFalse;
+	private DetermineFinalResultWorker finalResultWorker;
+	private AssignRoomNumberWorker assignRoomWorker;
 
 	public AddCommunityPointsWorker(BlockingQueue<ApplicationData> inputQueue,
-			BlockingQueue<ApplicationData> outputQueueTrue, BlockingQueue<ApplicationData> outputQueueFalse) {
+			BlockingQueue<ApplicationData> outputQueueTrue, BlockingQueue<ApplicationData> outputQueueFalse,
+			AssignRoomNumberWorker assignRoomWorker, DetermineFinalResultWorker finalResultWorker) {
 		super(inputQueue, outputQueueFalse);
 		this.inputQueue = inputQueue;
 		this.outputQueueTrue = outputQueueTrue;
 		this.outputQueueFalse = outputQueueFalse;
+		this.assignRoomWorker = assignRoomWorker;
+		this.finalResultWorker = finalResultWorker;
 	}
 
 	public void clickedTrue() {
@@ -53,14 +58,22 @@ public class AddCommunityPointsWorker extends AbstractWorker {
 				} else {
 					outputQueueFalse.put(applicantData);
 				}
+				if (inputQueue.isEmpty() && applicantData.isAutomated()) {
+					assignRoomWorker.clicked();
+				}
 			}
 		}
 	}
 
 	private ApplicationData createAndPublishData(AtomicBoolean clicked) throws InterruptedException {
-		clicked.set(false);
-		ApplicationData applicantData = AddCommunityPoints.calculate(inputQueue.take());
+		ApplicationData inputData = inputQueue.take();
+		clicked.set(inputData.isAutomated());
+		ApplicationData applicantData = AddCommunityPoints.calculate(inputData);
+		applicantData.setAutomated(inputData.isAutomated());
 		publish(applicantData);
+		if (inputQueue.isEmpty()) {
+			clicked.set(false);
+		}
 		return applicantData;
 	}
 

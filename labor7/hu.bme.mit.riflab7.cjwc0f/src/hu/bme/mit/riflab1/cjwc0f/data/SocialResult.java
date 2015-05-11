@@ -5,6 +5,7 @@ public class SocialResult {
 	private int roomNumber;
 	private boolean isAdmitted;
 	private ApplicationData applicantData;
+	private boolean automated;
 
 	public int getRoomNumber() {
 		return roomNumber;
@@ -44,6 +45,14 @@ public class SocialResult {
 	public void setApplicantData(ApplicationData applicantData) {
 		this.applicantData = applicantData;
 		applicantData.setSocialResult(this);
+	}
+
+	public void setAutomated(boolean automated) {
+		this.automated = automated;
+	}
+
+	public boolean isAutomated() {
+		return automated;
 	}
 
 }

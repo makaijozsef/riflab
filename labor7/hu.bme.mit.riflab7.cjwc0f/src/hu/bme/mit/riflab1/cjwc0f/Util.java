@@ -13,7 +13,7 @@ public class Util {
 
 	// UI and program parameters
 
-	public static final int SLEEP_TIME = 200;
+	public static final int SLEEP_TIME = /* 20 */0;
 
 	public static final int DEFAULT_WIDTH = 350;
 	public static final int DEFAULT_HEIGHT = 250;

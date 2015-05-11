@@ -21,9 +21,13 @@ public class SocialInspectionWorker extends SwingWorker<Object, SocialResult> {
 
 	private JTextArea textArea;
 
-	public SocialInspectionWorker(BlockingQueue<ApplicationData> inputQueue, BlockingQueue<SocialResult> outputQueue) {
+	private DetermineFinalResultWorker finalResultWorker;
+
+	public SocialInspectionWorker(BlockingQueue<ApplicationData> inputQueue, BlockingQueue<SocialResult> outputQueue,
+			DetermineFinalResultWorker finalResultWorker) {
 		this.inputQueue = inputQueue;
 		this.outputQueue = outputQueue;
+		this.finalResultWorker = finalResultWorker;
 	}
 
 	public void clicked() {
@@ -38,9 +42,20 @@ public class SocialInspectionWorker extends SwingWorker<Object, SocialResult> {
 			Thread.sleep(Util.SLEEP_TIME);
 			if (clicked.get()) {
 				clicked.set(false);
-				SocialResult socialResult = SocialInspection.createResult(inputQueue.take());
-				publish(socialResult);
-				outputQueue.put(socialResult);
+				ApplicationData inputData = null;
+				do {
+					if (inputQueue.isEmpty()) {
+						break;
+					}
+					inputData = inputQueue.take();
+					SocialResult socialResult = SocialInspection.createResult(inputData);
+					socialResult.setAutomated(inputData.isAutomated());
+					publish(socialResult);
+					outputQueue.put(socialResult);
+				} while (inputData.isAutomated());
+				// if (inputData.isAutomated()) {
+				// finalResultWorker.clicked();
+				// }
 			}
 		}
 	}

@@ -38,29 +38,32 @@ public class WorkflowStarter {
 
 		List<AbstractWindow> windows = new ArrayList<>();
 
-		EnterDataWorker enterDataWorker = new EnterDataWorker(queue1, queue2);
-		EnterDataWindow enterDataWindow = new EnterDataWindow(enterDataWorker);
-		windows.add(enterDataWindow);
-
-		SocialInspectionWorker socialInspectionWorker = new SocialInspectionWorker(queue2, queue3);
-		SocialInspectionWindow socialInspectionWindow = new SocialInspectionWindow(socialInspectionWorker);
-		windows.add(socialInspectionWindow);
-
-		DetermineAverageWorker determineAverageWorker = new DetermineAverageWorker(queue1, queue4);
-		DetermineAverageWindow determineAverageWindow = new DetermineAverageWindow(determineAverageWorker);
-		windows.add(determineAverageWindow);
-
-		AddCommunityPointsWorker addCommunityPointsWorker = new AddCommunityPointsWorker(queue4, queue5, queue6);
-		AddCommunityPointsWindow addCommunityPointsWindow = new AddCommunityPointsWindow(addCommunityPointsWorker);
-		windows.add(addCommunityPointsWindow);
-
-		AssignRoomNumberWorker assignRoomWorker = new AssignRoomNumberWorker(queue5, queue6);
-		AssignRoomNumberWindow assignRoomWindow = new AssignRoomNumberWindow(assignRoomWorker);
-		windows.add(assignRoomWindow);
-
 		DetermineFinalResultWorker finalResultWorker = new DetermineFinalResultWorker(queue6, queue3, queue7);
 		DetermineFinalResultWindow finalResultWindow = new DetermineFinalResultWindow(finalResultWorker);
 		windows.add(finalResultWindow);
+
+		AssignRoomNumberWorker assignRoomWorker = new AssignRoomNumberWorker(queue5, queue6, finalResultWorker);
+		AssignRoomNumberWindow assignRoomWindow = new AssignRoomNumberWindow(assignRoomWorker);
+		windows.add(assignRoomWindow);
+
+		AddCommunityPointsWorker addCommunityPointsWorker = new AddCommunityPointsWorker(queue4, queue5, queue6,
+				assignRoomWorker, finalResultWorker);
+		AddCommunityPointsWindow addCommunityPointsWindow = new AddCommunityPointsWindow(addCommunityPointsWorker);
+		windows.add(addCommunityPointsWindow);
+
+		DetermineAverageWorker determineAverageWorker = new DetermineAverageWorker(queue1, queue4,
+				addCommunityPointsWorker);
+		DetermineAverageWindow determineAverageWindow = new DetermineAverageWindow(determineAverageWorker);
+		windows.add(determineAverageWindow);
+
+		SocialInspectionWorker socialInspectionWorker = new SocialInspectionWorker(queue2, queue3, finalResultWorker);
+		SocialInspectionWindow socialInspectionWindow = new SocialInspectionWindow(socialInspectionWorker);
+		windows.add(socialInspectionWindow);
+
+		EnterDataWorker enterDataWorker = new EnterDataWorker(queue1, queue2, socialInspectionWorker,
+				determineAverageWorker);
+		EnterDataWindow enterDataWindow = new EnterDataWindow(enterDataWorker);
+		windows.add(enterDataWindow);
 
 		openAllWindows(windows);
 	}

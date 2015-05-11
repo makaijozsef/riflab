@@ -8,8 +8,15 @@ import java.util.concurrent.BlockingQueue;
 
 public class EnterDataWorker extends AbstractWorker {
 
-	public EnterDataWorker(BlockingQueue<ApplicationData> inputQueue, BlockingQueue<ApplicationData> outputQueue) {
+	private SocialInspectionWorker socialInspectionWorker;
+	private DetermineAverageWorker determineAverageWorker;
+
+	public EnterDataWorker(BlockingQueue<ApplicationData> inputQueue, BlockingQueue<ApplicationData> outputQueue,
+			SocialInspectionWorker socialInspectionWorker, DetermineAverageWorker determineAverageWorker) {
 		super(inputQueue, outputQueue);
+		this.socialInspectionWorker = socialInspectionWorker;
+		this.determineAverageWorker = determineAverageWorker;
+
 	}
 
 	@Override
@@ -34,6 +41,8 @@ public class EnterDataWorker extends AbstractWorker {
 
 					outputQueue.put(generatedData);
 				}
+				socialInspectionWorker.clicked();
+				determineAverageWorker.clicked();
 			}
 		}
 	}

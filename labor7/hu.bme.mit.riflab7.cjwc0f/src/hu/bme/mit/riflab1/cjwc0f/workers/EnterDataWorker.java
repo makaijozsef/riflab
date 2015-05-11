@@ -33,7 +33,7 @@ public class EnterDataWorker extends AbstractWorker {
 			}
 			if (clickedAutomatic.get()) {
 				clickedAutomatic.set(false);
-				for (int i = 0; i < 1000; i++) {
+				for (int i = 0; i < Util.DATA_COUNT + 1; i++) {
 					ApplicationData generatedData = EnterApplicantData.generate();
 					generatedData.setAutomated(true);
 					publish(generatedData);

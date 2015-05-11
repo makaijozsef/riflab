@@ -7,7 +7,7 @@ import java.util.Random;
 
 public class Generator {
 
-	public final static int DATA_COUNT = 1000;
+	public final static int DATA_COUNT = 10000;
 
 	public static void main(String[] args) throws FileNotFoundException {
 		PrintWriter pw = new PrintWriter(new File("E:\\gauss_" + DATA_COUNT + ".csv"));
@@ -22,7 +22,7 @@ public class Generator {
 				if (i >= (DATA_COUNT / 2) && j == 4) {
 					pw.write("0;");
 				} else {
-					pw.write(d + ";");
+					pw.write(d + (j == 5 ? "" : ";"));
 				}
 				
 				/*/

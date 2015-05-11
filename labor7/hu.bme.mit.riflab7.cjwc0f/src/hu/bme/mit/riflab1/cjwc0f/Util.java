@@ -11,6 +11,8 @@ public class Util {
 	public static final int HIGHEST_EARNING = 200000;
 	public static final int DEFAULT_ROOM = -1;
 
+	public static final int DATA_COUNT = 1000;
+	
 	// UI and program parameters
 
 	public static final int SLEEP_TIME = /* 20 */0;

@@ -25,16 +25,16 @@ public class WorkflowStarter {
 
 	public static void main(String[] args) {
 
-		BlockingQueue<ApplicationData> queue1 = new ArrayBlockingQueue<ApplicationData>(1020);
-		BlockingQueue<ApplicationData> queue2 = new ArrayBlockingQueue<ApplicationData>(1020);
-		BlockingQueue<SocialResult> queue3 = new ArrayBlockingQueue<SocialResult>(1020);
-		BlockingQueue<ApplicationData> queue4 = new ArrayBlockingQueue<ApplicationData>(1020);
-		BlockingQueue<ApplicationData> queue5 = new ArrayBlockingQueue<ApplicationData>(1020);
+		BlockingQueue<ApplicationData> queue1 = new ArrayBlockingQueue<ApplicationData>(Util.DATA_COUNT  + 20 + 20);
+		BlockingQueue<ApplicationData> queue2 = new ArrayBlockingQueue<ApplicationData>(Util.DATA_COUNT  + 20);
+		BlockingQueue<SocialResult> queue3 = new ArrayBlockingQueue<SocialResult>(Util.DATA_COUNT  + 20);
+		BlockingQueue<ApplicationData> queue4 = new ArrayBlockingQueue<ApplicationData>(Util.DATA_COUNT  + 20);
+		BlockingQueue<ApplicationData> queue5 = new ArrayBlockingQueue<ApplicationData>(Util.DATA_COUNT  + 20);
 		// May not be correctly ordered!
-		BlockingQueue<ApplicationData> queue6 = new ArrayBlockingQueue<ApplicationData>(1020);
+		BlockingQueue<ApplicationData> queue6 = new ArrayBlockingQueue<ApplicationData>(Util.DATA_COUNT  + 20);
 
 		// Final results
-		BlockingQueue<ApplicationData> queue7 = new ArrayBlockingQueue<ApplicationData>(20);
+		BlockingQueue<ApplicationData> queue7 = new ArrayBlockingQueue<ApplicationData>(Util.DATA_COUNT  + 20);
 
 		List<AbstractWindow> windows = new ArrayList<>();
 

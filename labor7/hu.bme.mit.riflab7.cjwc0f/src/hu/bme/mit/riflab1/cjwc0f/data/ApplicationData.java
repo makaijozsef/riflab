@@ -2,6 +2,53 @@ package hu.bme.mit.riflab1.cjwc0f.data;
 
 public class ApplicationData {
 
+	private double enterTime;
+	private double socialTime;
+	private double averageTime;
+	private double comminutyTime;
+	private double roomTime;
+	private double finalTime;
+	
+	public double getSocialTime() {
+		return socialTime;
+	}
+
+	public void setSocialTime(double socialTime) {
+		this.socialTime = socialTime;
+	}
+
+	public double getAverageTime() {
+		return averageTime;
+	}
+
+	public void setAverageTime(double averageTime) {
+		this.averageTime = averageTime;
+	}
+
+	public double getComminutyTime() {
+		return comminutyTime;
+	}
+
+	public void setComminutyTime(double comminutyTime) {
+		this.comminutyTime = comminutyTime;
+	}
+
+	public double getRoomTime() {
+		return roomTime;
+	}
+
+	public void setRoomTime(double roomTime) {
+		this.roomTime = roomTime;
+	}
+
+	public double getFinalTime() {
+		return finalTime;
+	}
+
+	public void setFinalTime(double finalTime) {
+		this.finalTime = finalTime;
+	}
+
 	private int communityPoints;
 	private double average1;
 	private double average2;
@@ -127,6 +174,14 @@ public class ApplicationData {
 
 	public void setAutomated(boolean isAutomated) {
 		this.isAutomated = isAutomated;
+	}
+
+	public double getEnterTime() {
+		return enterTime;
+	}
+
+	public void setEnterTime(double enterTime) {
+		this.enterTime = enterTime;
 	}
 
 }

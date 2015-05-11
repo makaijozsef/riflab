@@ -1,6 +1,7 @@
 package hu.bme.mit.riflab1.cjwc0f.workflow;
 
 import static hu.bme.mit.riflab1.cjwc0f.Util.rand;
+import hu.bme.mit.riflab1.cjwc0f.Generate;
 import hu.bme.mit.riflab1.cjwc0f.Util;
 import hu.bme.mit.riflab1.cjwc0f.data.ApplicationData;
 import hu.bme.mit.riflab1.cjwc0f.data.SocialResult;
@@ -20,7 +21,8 @@ public class SocialInspection {
 		}
 
 		socialResult.setApplicantData(applicationData);
-
+		applicationData.setSocialTime(Generate.generateGaussian());
+		
 		return socialResult;
 	}
 

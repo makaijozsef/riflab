@@ -1,5 +1,6 @@
 package hu.bme.mit.riflab1.cjwc0f.workflow;
 
+import hu.bme.mit.riflab1.cjwc0f.Generate;
 import hu.bme.mit.riflab1.cjwc0f.Util;
 import hu.bme.mit.riflab1.cjwc0f.data.ApplicationData;
 import hu.bme.mit.riflab1.cjwc0f.data.SocialResult;
@@ -22,6 +23,7 @@ public class DetermineFinalResult {
 				applicantData.setRoomNumber(Util.DEFAULT_ROOM);
 			}
 		}
+		applicantData.setFinalTime(Generate.generateGaussian());
 		return applicantData;
 	}
 

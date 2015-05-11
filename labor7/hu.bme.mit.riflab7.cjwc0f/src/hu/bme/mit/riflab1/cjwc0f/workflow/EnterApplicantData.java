@@ -1,6 +1,7 @@
 package hu.bme.mit.riflab1.cjwc0f.workflow;
 
 import static hu.bme.mit.riflab1.cjwc0f.Util.rand;
+import hu.bme.mit.riflab1.cjwc0f.Generate;
 import hu.bme.mit.riflab1.cjwc0f.Util;
 import hu.bme.mit.riflab1.cjwc0f.data.ApplicationData;
 
@@ -10,6 +11,8 @@ public class EnterApplicantData {
 
 		ApplicationData applicantData = new ApplicationData();
 
+		applicantData.setEnterTime(Generate.generateGaussian());
+		
 		double average1 = getRandomAverage();
 		applicantData.setAverage1(average1);
 
@@ -20,7 +23,7 @@ public class EnterApplicantData {
 		applicantData.setEarnings(earnings);
 
 		applicantData.setCommunityPoints(rand.nextInt(100));
-
+		applicantData.setComminutyTime(Generate.generateGaussian());
 		return applicantData;
 	}
 
